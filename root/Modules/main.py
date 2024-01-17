@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox,QWidget
 from PyQt5 import uic,QtGui
 
-from entry2 import *
+from Roleselection import *
 
 
 
