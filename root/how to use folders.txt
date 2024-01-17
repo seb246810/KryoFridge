@@ -1,0 +1,5 @@
+When running the program use the main.py file to access the start point.
+
+Use testing to write automated tests with pytest-qt.
+
+use manual tests to expreiment with uis and programs devloped.
