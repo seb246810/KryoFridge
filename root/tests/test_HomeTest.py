@@ -1,14 +1,25 @@
-import sys
+#import sys
+import os
 import pytest
-from log  import MyGui
+
 from PyQt5 import QtCore
+
+#print('original sys.path:', sys.path)
+
+#sys.path.append('\\root\\Modules')
+
+#os.chdir(r,'\root\Modules')
+
+
+
+from ..Modules import log
 
 
 @pytest.fixture
 
 def app(qtbot):
     
-    test_hello_app = MyGui()
+    test_hello_app = log.MyGui()
     qtbot.addWidget(test_hello_app)
     return test_hello_app
 
@@ -23,3 +34,4 @@ def test_label(app):
 def test_window_close(app,qtbot):
     qtbot.mouseClick(app.return_2,QtCore.Qt.LeftButton)
     assert not  app.isVisible()
+    
