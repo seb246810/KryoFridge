@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox
 from PyQt5 import uic,QtGui
-from HeadchefRegistration import *
+
 
 
 
@@ -14,12 +14,13 @@ class entrypoint(QMainWindow):
         self.show()
 
         self.Headchef.clicked.connect(self.signup)
-        self.Delivery.clicked.connect(self.signup)
-        self.staff.clicked.connect(self.signup)
+        #self.Delivery.clicked.connect(self.signup)
+        #self.staff.clicked.connect(self.signup)
 
     def signup(self):
+        import HeadchefRegistration
         
-        self.window = Headchefregister()
+        self.window = HeadchefRegistration.Headchefregister()
         #self.close()
         self.window.show()
 

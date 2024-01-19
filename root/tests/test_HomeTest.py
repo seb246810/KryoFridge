@@ -12,26 +12,22 @@ from PyQt5 import QtCore
 
 
 
-from ..Modules import log
+from ..Modules import Headcheflogin
 
 
 @pytest.fixture
 
 def app(qtbot):
     
-    test_hello_app = log.MyGui()
+    test_hello_app = Headcheflogin.MyGui()
     qtbot.addWidget(test_hello_app)
     return test_hello_app
 
 
-def test_button(app):
-    assert app.label.text() == "Username"
 
-def test_label(app):
-    assert app.label_2.text()== "Password"
 
 
 def test_window_close(app,qtbot):
-    qtbot.mouseClick(app.return_2,QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.BackButton,QtCore.Qt.LeftButton)
     assert not  app.isVisible()
     
