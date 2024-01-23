@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="LoginButton">
+  <widget class="QPushButton" name="CreateButton">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -105,7 +105,7 @@
      <string>Username</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="AccountType">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -146,9 +146,9 @@
   </widget>
  </widget>
  <tabstops>
-  <tabstop>comboBox</tabstop>
+  <tabstop>AccountType</tabstop>
   <tabstop>PasswordLineEdit</tabstop>
-  <tabstop>LoginButton</tabstop>
+  <tabstop>CreateButton</tabstop>
   <tabstop>UsernameLineEdit</tabstop>
  </tabstops>
  <resources/>
