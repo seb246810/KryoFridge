@@ -1,7 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QDialog
 from PyQt5 import uic,QtGui
-
+from PyQt5 import QtWidgets
+from HeadchefRegistration import *
+from Headcheflogin import *
+from driverLogin import *
+import sqlite3
 
 
 
@@ -13,16 +17,21 @@ class entrypoint(QMainWindow):
         uic.loadUi("../UI/entrypoint.ui",self)
         self.show()
 
-        self.Headchef.clicked.connect(self.signup)
-        #self.Delivery.clicked.connect(self.signup)
-        #self.staff.clicked.connect(self.signup)
+        self.Headchef.clicked.connect(self.loginScreen)
+        self.Delivery.clicked.connect(self.driverLoginWindow)
+        self.staff.clicked.connect(self.signup)
+
+    def loginScreen(self):
+        self.login = MyGui()
 
     def signup(self):
-        import HeadchefRegistration
         
-        self.window = HeadchefRegistration.Headchefregister()
+        self.window = Headchefregister()
         #self.close()
         self.window.show()
+
+    def driverLoginWindow(self):
+        self.login = driverLogin()
 
 
 
