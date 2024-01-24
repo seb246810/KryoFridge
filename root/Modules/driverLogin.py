@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMess
 from PyQt5 import uic,QtGui
 from PyQt5.QtCore import QTimer
 import sqlite3
-from fridge import *
 import math, random
 
 
@@ -29,10 +28,9 @@ class driverLogin(QMainWindow):
         self.fridge = None
 
     def gotofridge(self):
+        from fridge import fridgeWindow
         if not self.fridge:
             self.fridge = fridgeWindow()
-        self.hide()
-        self.fridge.show()
 
     # generates random 4 digit number
     def getOTP(self):

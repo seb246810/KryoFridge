@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QDialog, QWidget
 from PyQt5 import uic,QtGui
 from Roleselection import *
-from Headcheflogin import *
-from HeadchefRegistration import *
+#from Headcheflogin import *
+#from HeadchefRegistration import *
 
 
 class fridgeWindow(QMainWindow):
@@ -11,13 +11,17 @@ class fridgeWindow(QMainWindow):
         uic.loadUi("../UI/fridge.ui",self)
         self.show()
 
-        self.ExitButton.clicked.connect(self.exit)
+        self.ExitButton.clicked.connect(self.back)
 
         
 
-    def exit(self):
+    def back(self):
+       
         
         self.close()
+       
+        
+       
             
         
         
