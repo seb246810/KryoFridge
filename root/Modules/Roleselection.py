@@ -2,9 +2,9 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QDialog
 from PyQt5 import uic,QtGui
 from PyQt5 import QtWidgets
-from HeadchefRegistration import *
-from Headcheflogin import *
-from driverLogin import *
+from HeadchefRegistration import Headchefregister
+from Headcheflogin import MyGui
+from driverLogin import driverLogin
 import sqlite3
 
 

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QDialog, QWidget
 from PyQt5 import uic,QtGui
-from Roleselection import *
+#from Roleselection import *
 #from Headcheflogin import *
 #from HeadchefRegistration import *
 

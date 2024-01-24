@@ -1,4 +1,4 @@
-#import sys
+import sys
 import os
 import pytest
 
@@ -6,28 +6,38 @@ from PyQt5 import QtCore
 
 #print('original sys.path:', sys.path)
 
-#sys.path.append('\\root\\Modules')
+sys.path.append('../Modules')
 
 #os.chdir(r,'\root\Modules')
 
 
-
-from ..Modules import Headcheflogin
+import Roleselection
 
 
 @pytest.fixture
 
 def app(qtbot):
+  
     
-    test_hello_app = Headcheflogin.MyGui()
+    test_hello_app = Roleselection.entrypoint()
     qtbot.addWidget(test_hello_app)
+    
     return test_hello_app
 
 
 
 
 
-def test_window_close(app,qtbot):
-    qtbot.mouseClick(app.BackButton,QtCore.Qt.LeftButton)
-    assert not  app.isVisible()
-    
+def test_Headchefwindowlogin_open(app,qtbot):
+    qtbot.mouseClick(app.Headchef,QtCore.Qt.LeftButton)
+    assert   app.isVisible()
+
+def test_Driverloginwindow_opens(app,qtbot):
+    qtbot.mouseClick(app.Delivery,QtCore.Qt.LeftButton)
+    assert app.isVisible()
+
+def test_Label_correct(app):
+    assert app.label.text() == "Kryo Fridge Application"
+
+
+
