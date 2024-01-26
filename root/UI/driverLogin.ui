@@ -129,7 +129,7 @@
    <property name="font">
     <font>
      <family>Helvetica</family>
-     <pointsize>16</pointsize>
+     <pointsize>20</pointsize>
     </font>
    </property>
    <property name="text">
