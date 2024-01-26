@@ -37,9 +37,9 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>140</y>
+      <y>150</y>
       <width>91</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -55,9 +55,9 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>140</y>
+      <y>150</y>
       <width>101</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
@@ -73,9 +73,9 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>140</y>
-      <width>91</width>
-      <height>41</height>
+      <y>150</y>
+      <width>101</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
