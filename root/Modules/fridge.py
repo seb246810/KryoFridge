@@ -4,6 +4,7 @@ from PyQt5 import uic, QtGui
 from Roleselection import *
 from Headcheflogin import *
 from HeadchefRegistration import *
+import sqlite3
 
 
 def user_role():
@@ -15,11 +16,11 @@ class fridgeWindow(QMainWindow):
         super(fridgeWindow, self).__init__()
         uic.loadUi("../UI/fridge.ui", self)
         self.show()
-        conn = sqlite3.connect('Fridge.db')
-        cur = conn.cursor()
+        self.conn = sqlite3.connect('Fridge.db')
+        self.cursor = self.conn.cursor()
 
-        conn.commit()
-        conn.close()
+        self.conn.commit()
+        self.conn.close()
 
         self.user_role_access()
 
