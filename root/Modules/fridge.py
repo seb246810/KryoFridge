@@ -41,6 +41,28 @@ class fridgeWindow(QMainWindow):
             item_data = dialog.get_data()
             print("Item added:", item_data)
 
+            self.Db_Insertion(item_data)
+
+    def Db_Insertion(self, item_data):
+        conn = sqlite3.connect('Fridge.db')
+        cur = conn.cursor()
+
+        try:
+            Query = '''INSERT INTO Fridge(Name, Quantity, "Expiry Date", Weight, Ordered)
+                                  VALUES (?, ?, ?, ?, ?)'''
+            cur.execute(Query, (
+                item_data['name'],
+                item_data['quantity'],
+                item_data['expiry_date'],
+                item_data['weight'],
+                item_data['ordered']
+            ))
+            conn.commit()
+        except sqlite3.Error as e:
+            print("An error occurred:", e.args[0])
+        finally:
+            conn.close()
+
     def RemoveItemsFromFridge(self):
         dialog = RemoveItemDialog()
         if dialog.exec_() == QDialog.Accepted:
@@ -54,7 +76,6 @@ class fridgeWindow(QMainWindow):
         current_role = user_role()
         self.AddButton.setEnabled(current_role in ['HeadChef', 'DeliveryDriver'])
         self.RemoveButton.setEnabled(current_role == 'HeadChef')
-
 
 class AddItemsDialog(QDialog):
     def __init__(self):
@@ -80,14 +101,14 @@ class AddItemsDialog(QDialog):
         layout.addWidget(buttons)
         self.setLayout(layout)
 
-        def get_data(self):
-            return {
-                "name": self.name_edit.text(),
-                "quantity": int(self.quantity_edit.text()),
-                "expiry_date": self.expiry_date_edit.text(),
-                "weight": float(self.weight_edit.text()),
-                "ordered": self.ordered_checkbox.isChecked()
-            }
+    def get_data(self):
+        return {
+            "name": self.name_edit.text(),
+            "quantity": int(self.quantity_edit.text()),
+            "expiry_date": self.expiry_date_edit.text(),
+            "weight": float(self.weight_edit.text()),
+            "ordered": int(self.ordered_checkbox.isChecked())
+        }
 
 class RemoveItemDialog(QDialog):
     def __init__(self):
@@ -95,7 +116,7 @@ class RemoveItemDialog(QDialog):
         self.setWindowTitle("Remove Item")
 
         layout = QVBoxLayout()
-        from_layout =QFormLayout()
+        from_layout = QFormLayout()
         self.name_edit = QLineEdit(self)
         self.quantity_edit = QLineEdit(self)
 
@@ -111,13 +132,13 @@ class RemoveItemDialog(QDialog):
 
         self.setLayout(layout)
 
-        def get_data(self):
-            return {
-                "name": self.name_edit.text(),
-                "quantity": int(self.quantity_edit.text())
-            }
+    def get_data(self):
+        return {
+            "name": self.name_edit.text(),
+            "quantity": int(self.quantity_edit.text())
+        }
 
-    if __name__ == '__main__':
-        app = QApplication([])
-        window = fridgeWindow()
-        app.exec_()
+if __name__ == '__main__':
+    app = QApplication([])
+    window = fridgeWindow()
+    app.exec_()
