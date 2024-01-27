@@ -35,13 +35,16 @@ class fridgeWindow(QMainWindow):
         pass
 
     def AddItemsToFridge(self):
-        dialog = AddItemsToFridge()
+        dialog = AddItemsDialog()
         if dialog.exec_() == QDialog.Accepted:
             item_data = dialog.get_data()
             print("Item added:", item_data)
 
     def RemoveItemsFromFridge(self):
-        pass
+        dialog = RemoveItemDialog()
+        if dialog.exec_() == QDialog.Accepted:
+            item_data = dialog.get_data()
+            print("Item removed:", item_data)
 
     def WritePurchaseOrder(self):
         pass
@@ -52,7 +55,7 @@ class fridgeWindow(QMainWindow):
         self.RemoveButton.setEnabled(current_role == 'HeadChef')
 
 
-class AddItemsToFridge(QDialog):
+class AddItemsDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Add Item")
@@ -83,6 +86,34 @@ class AddItemsToFridge(QDialog):
                 "expiry_date": self.expiry_date_edit.text(),
                 "weight": float(self.weight_edit.text()),
                 "ordered": self.ordered_checkbox.isChecked()
+            }
+
+class RemoveItemDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Remove Item")
+
+        layout = QVBoxLayout()
+        from_layout =QFormLayout()
+        self.name_edit = QLineEdit(self)
+        self.quantity_edit = QLineEdit(self)
+
+        from_layout.addRow("Name", self.name_edit)
+        from_layout.addRow("Quantity", self.quantity_edit)
+
+        buttons = QDialogButtonBox(QDialogButtonBox)
+        buttons.accepted.connected(self.accept)
+        buttons.rejected.connected(self.reject)
+
+        layout.addLayout(from_layout)
+        layout.addWidget(buttons)
+
+        self.setLayout(layout)
+
+        def get_data(self):
+            return {
+                "name": self.name_edit.text(),
+                "quantity": int(self.quantity_edit.text())
             }
 
     if __name__ == '__main__':
