@@ -9,7 +9,8 @@ from HeadchefRegistration import *
 class MainMenu(QMainWindow):
     def __init__(self):
         super(MainMenu, self).__init__()
-        uic.loadUi("../UI/MainMenu.ui", self)
+
+        uic.loadUi("../UI/MainMenu2.ui", self)
 
 
 
