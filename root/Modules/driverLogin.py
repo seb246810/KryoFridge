@@ -5,13 +5,14 @@ from PyQt5 import uic,QtGui
 from PyQt5.QtCore import QTimer
 import sqlite3
 import math, random
+from fridge import *
 
 
 
 
-class driverLogin(QMainWindow):
+class driverLogin(QWidget):
 
-    def __init__(self):
+    def __init__(self, parent=None):
         super(driverLogin, self).__init__()
         uic.loadUi("../UI/driverLogin.ui",self)
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password) #hides user input password
@@ -106,6 +107,10 @@ class driverLogin(QMainWindow):
         #self.window.show()
     
 
-
+if __name__ == '__main__':
+    app = QApplication([])
+    window = driverLogin()
+    window.show()
+    app.exec_()
 
 

@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QLineEdit, QDialog
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QLineEdit, QDialog, QWidget
 from PyQt5 import uic,QtGui
 import sqlite3
 from fridge import *
@@ -8,10 +8,10 @@ from fridge import *
 
 
 
-class MyGui(QMainWindow):
+class Headcheflogin(QWidget):
 
-    def __init__(self):
-        super(MyGui, self).__init__()
+    def __init__(self, parent = None):
+        super(Headcheflogin, self).__init__()
         uic.loadUi("../UI/ChefLogin.ui",self)
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password) #hides user input password
         self.show()

@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMess
 from PyQt5 import uic,QtGui
 from PyQt5 import QtWidgets
 from HeadchefRegistration import Headchefregister
-from Headcheflogin import MyGui
+from Headcheflogin import Headcheflogin
 from driverLogin import driverLogin
 import sqlite3
 

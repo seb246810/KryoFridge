@@ -1,9 +1,10 @@
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QWidget
 from PyQt5 import uic,QtGui
+from fridge import *
 
 
-class Headchefregister(QMainWindow):
-    def __init__(self):
+class Headchefregister(QWidget):
+    def __init__(self,parent = None):
         super(Headchefregister,self).__init__()
         uic.loadUi("../UI/HeadChefRegistration.ui",self)
         self.show()

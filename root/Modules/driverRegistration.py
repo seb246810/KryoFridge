@@ -5,8 +5,8 @@ from driverLogin import *
 from fridge import *
 
 
-class driverRegister(QMainWindow):
-    def __init__(self):
+class driverRegister(QWidget):
+    def __init__(self, parent=None):
         super(driverRegister,self).__init__()
         uic.loadUi("../UI/driverRegister.ui",self)
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)
