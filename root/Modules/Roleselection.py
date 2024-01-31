@@ -2,9 +2,9 @@ import sys
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QDialog
 from PyQt5 import uic,QtGui
 from PyQt5 import QtWidgets
-from HeadchefRegistration import Headchefregister
-from Headcheflogin import Headcheflogin
-from driverLogin import driverLogin
+from HeadchefRegistration import *
+from Headcheflogin import *
+from driverLogin import *
 import sqlite3
 
 
@@ -22,7 +22,7 @@ class entrypoint(QMainWindow):
         self.staff.clicked.connect(self.signup)
 
     def loginScreen(self):
-        self.login = MyGui()
+        self.login = Headcheflogin()
 
     def signup(self):
         

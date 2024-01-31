@@ -8,7 +8,7 @@ sys.path.append('../Modules')
 
 
 
-import driverLogin
+
 
 
 
@@ -16,7 +16,7 @@ import driverLogin
 
 def app(qtbot):
      
-  
+    import driverLogin
     
     test_hello_app = driverLogin.driverLogin()
     qtbot.addWidget(test_hello_app)
@@ -53,13 +53,35 @@ def test_onefieldFilled_test(app,qtbot):
 
 def test_correctcredentials_test(app,qtbot):
     app.usernamefield.setText("seb")
-    app.passwordfield.setText("hello123")
+    app.passwordfield.setText("don1")
 
 
     qtbot.mouseClick(app.LoginButton,QtCore.Qt.LeftButton)
     assert app.error.text()== "Login Successful"
     assert app.close()
-    app.message.done(1)
+
+def test_otp_test(app,qtbot):
+
+    otp =app.getOTP()
+
+    assert len(otp) ==4
+
+
+def test_updatepassword__(app,qtbot):
+    username = "seb"
+    password = "don1"
+
+    app.update_user_password(username,password)
+
+    query = 'SELECT password FROM deliverydriver WHERE username= ?'
+    app.cursor.execute(query, (username,))
+    user = app.cursor.fetchone()
+
+    assert user[0] == password
+
+
+   
+  
     
     
     
