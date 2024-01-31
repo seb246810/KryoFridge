@@ -3,8 +3,6 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QLineEdit, QDialog, QWidget
 from PyQt5 import uic,QtGui
 import sqlite3
-from fridge import *
-
 
 
 

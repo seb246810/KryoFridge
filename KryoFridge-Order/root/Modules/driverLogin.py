@@ -47,9 +47,10 @@ class driverLogin(QWidget):
         timer.timeout.connect(welcome.accept)
         timer.start(1500)
 
-        timer.timeout.connect(self.gotofridge)
-        
-    
+        self.fridge = fridgeWindow()
+        self.fridge.show()
+
+
 
     def driverRegisterWindow(self):
         from driverRegistration import driverRegister
@@ -83,6 +84,8 @@ class driverLogin(QWidget):
 
                 if ok and otp_input == otp:
                     self.welcomeDriver(username)
+                    self.fridge = fridgeWindow()
+                    self.fridge.show()
 
                     
                 else:

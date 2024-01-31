@@ -3,7 +3,7 @@ from PyQt5 import uic,QtGui
 from fridge import *
 
 
-class Headchefregister(QWidget):
+class Headchefregister(QMainWindow):
     def __init__(self,parent = None):
         super(Headchefregister,self).__init__()
         uic.loadUi("../UI/HeadChefRegistration.ui",self)
