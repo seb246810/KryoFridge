@@ -30,8 +30,12 @@ class MainMenu(QMainWindow):
         self.HChefRegBtn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(4))
         self.HChefLogBtn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(5))
 
+        self.Driver_Register_Window.registration_success.connect(self.showDriverLogin)
+    def showDriverLogin(self):
+        self.stackedWidget.setCurrentIndex(3)
+
 if __name__ == '__main__':
     app = QApplication([])
     window = MainMenu()
     window.show()
-    app.exec_()
+    sys.exit(app.exec_())

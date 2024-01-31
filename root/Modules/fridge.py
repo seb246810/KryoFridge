@@ -161,5 +161,5 @@ class RemoveItemDialog(QDialog):
 if __name__ == '__main__':
     app = QApplication([])
     window = fridgeWindow()
-    window.show()
+    #window.show()
     app.exec_()
