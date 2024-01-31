@@ -25,6 +25,7 @@ class fridgeWindow(QMainWindow):
         self.RemoveButton.clicked.connect(self.RemoveItemsFromFridge)
         self.OrderButton.clicked.connect(self.MakePurchaseOrder)
         self.HealthReportButton.clicked.connect(self.HealthReport)
+        self.NotificationButton.clicked.connect(self.alert)
 
     def database(self):
         self.conn = sqlite3.connect('fridge.db')
@@ -127,6 +128,30 @@ class fridgeWindow(QMainWindow):
 
         QMessageBox.information(self, "Health Report", health_status)
 
+    def alert(self):
+        if user_role() != 'HeadChef':
+            QMessageBox.warning(self, "Access Denied", "Only the Head Chef can check expiry dates.")
+            return
+
+        alert_status = "Items Nearing Expiry:\n\n"
+        threshold_days = 7
+        current_date = QDate.currentDate()
+        self.cursor.execute("SELECT Name,Expiry_Date FROM Fridge")
+        items = self.cursor.fetchall()
+
+        alert_triggered =False
+        for name,expiry_date in items:
+            expiry_qdate = QDate.fromString(expiry_date, "yyyy-MM-dd")
+            if current_date.daysTo(expiry_qdate) <= threshold_days:
+                alert_triggered =True
+                days_left = current_date.daysTo(expiry_qdate)
+                alert_status += f"{name} expires in {days_left} days\n"
+
+        if alert_triggered:
+            QMessageBox.warning(self, "Expiry Alert", alert_status)
+        else:
+            QMessageBox.information(self, "Expiry Check", "No items are nearing expiry within the next 7 days.")
+
 
     def user_role_access(self):
         current_role = user_role()
@@ -134,6 +159,7 @@ class fridgeWindow(QMainWindow):
         self.RemoveButton.setEnabled(current_role == 'HeadChef')
         self.OrderButton.setEnabled(current_role == 'HeadChef')
         self.HealthReportButton.setEnabled(current_role == 'HeadChef')
+        self.NotificationButton.setEnabled(current_role == 'HeadChef')
 
     def back(self):
         self.conn.close()
