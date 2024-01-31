@@ -8,7 +8,7 @@ class Headchefregister(QWidget):
     def __init__(self,parent = None):
         super(Headchefregister,self).__init__()
         uic.loadUi("../UI/HeadChefRegistration.ui",self)
-self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)
         self.confirmfield.setEchoMode(QtWidgets.QLineEdit.Password)
         self.show()
 

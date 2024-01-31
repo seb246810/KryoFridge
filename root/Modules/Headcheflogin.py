@@ -47,6 +47,9 @@ class Headcheflogin(QWidget):
     def registerWindow(self):
         from HeadchefRegistration import Headchefregister
 
+        self.window = Headchefregister()
+        self.window.show()
+
         # checks number of users
         user_count_query = 'SELECT COUNT(*) FROM users'
         self.cursor.execute(user_count_query)

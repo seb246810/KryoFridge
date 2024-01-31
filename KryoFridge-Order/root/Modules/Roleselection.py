@@ -22,7 +22,7 @@ class entrypoint(QMainWindow):
         self.staff.clicked.connect(self.signup)
 
     def loginScreen(self):
-        self.login = MyGui()
+        self.login = Headcheflogin()
 
     def signup(self):
         
