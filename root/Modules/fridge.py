@@ -1,5 +1,6 @@
+from PyQt5.QtCore import QDate, Qt
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QDialog, QWidget, \
-    QDialogButtonBox, QVBoxLayout, QFormLayout, QCheckBox, QTableWidgetItem
+    QDialogButtonBox, QVBoxLayout, QFormLayout, QCheckBox, QTableWidgetItem, QDateEdit
 from PyQt5 import uic, QtGui
 from Roleselection import *
 from Headcheflogin import *
@@ -22,6 +23,8 @@ class fridgeWindow(QMainWindow):
         self.ExitButton.clicked.connect(self.back)
         self.AddButton.clicked.connect(self.AddItemsToFridge)
         self.RemoveButton.clicked.connect(self.RemoveItemsFromFridge)
+        self.OrderButton.clicked.connect(self.MakePurchaseOrder)
+        self.HealthReportButton.clicked.connect(self.HealthReport)
 
     def database(self):
         self.conn = sqlite3.connect('fridge.db')
@@ -34,6 +37,8 @@ class fridgeWindow(QMainWindow):
         self.fridgeStorage.setRowCount(len(rows))
         for row_num, row_data in enumerate(rows):
             for col_num, data in enumerate(row_data):
+                item = QTableWidgetItem(str(data))
+                item.setFlags(item.flags() & ~Qt.ItemIsEditable)
                 self.fridgeStorage.setItem(row_num, col_num, QTableWidgetItem(str(data)))
 
     def AddItemsToFridge(self):
@@ -84,17 +89,55 @@ class fridgeWindow(QMainWindow):
         finally:
             self.LoadFridgeContents()
 
-    def back(self):
-        self.conn.close()
-        self.close()
+    def MakePurchaseOrder(self):
+        if user_role() != 'HeadChef':
+            QMessageBox.warning(self, "Access Denied", "You do not have the access to purchase order")
+            return
+        purchase_order = "Purchase Order\n\n"
+        self.cursor.execute("SELECT Name, Quantity FROM Fridge WHERE Ordered=0")
+        items = self.cursor.fetchall()
 
-    def WritePurchaseOrder(self):
-        pass
+        if not items:
+            QMessageBox.information(self, "No Order", "There are no items to order.")
+            return
+        for item in items:
+            name, quantity = item
+            purchase_order += f"Item: {name}, Quantity: {quantity}\n"
+        QMessageBox.information(self, "Purchase Order", purchase_order)
+
+        self.cursor.execute("UPDATE Fridge SET Ordered=1 WHERE Ordered=0")
+        self.conn.commit()
+        self.LoadFridgeContents()
+
+    def HealthReport(self):#
+        if user_role() != 'HeadChef':
+            QMessageBox.warning(self, "Access Denied", "You do not have the access to View the Health Report")
+            return
+
+        health_status = "Health Report\n\n"
+        self.cursor.execute("SELECT Name,Expiry_Date FROM Fridge ORDER BY Expiry_Date ASC")
+        items = self.cursor.fetchall()
+
+        if not items:
+            QMessageBox.information(self, "No Items", "There are currently no items in the fridge.")
+            return
+        for item in items:
+            name, expiry_date = item
+            health_status += f"Item: {name}, Expiry_Date: {expiry_date}\n"
+
+        QMessageBox.information(self, "Health Report", health_status)
+
 
     def user_role_access(self):
         current_role = user_role()
         self.AddButton.setEnabled(current_role in ['HeadChef', 'DeliveryDriver'])
         self.RemoveButton.setEnabled(current_role == 'HeadChef')
+        self.OrderButton.setEnabled(current_role == 'HeadChef')
+        self.HealthReportButton.setEnabled(current_role == 'HeadChef')
+
+    def back(self):
+        self.conn.close()
+        self.close()
 
 
 class AddItemsDialog(QDialog):
@@ -105,7 +148,9 @@ class AddItemsDialog(QDialog):
         form_layout = QFormLayout()
         self.name_edit = QLineEdit(self)
         self.quantity_edit = QLineEdit(self)
-        self.expiry_date_edit = QLineEdit(self)
+        self.expiry_date_edit = QDateEdit(self)
+        self.expiry_date_edit.setCalendarPopup(True)
+        self.expiry_date_edit.setDate(QDate.currentDate())
         self.weight_edit = QLineEdit(self)
         self.ordered_checkbox = QCheckBox("Ordered", self)
         form_layout.addRow("Name:", self.name_edit)
@@ -125,7 +170,7 @@ class AddItemsDialog(QDialog):
         return {
             "name": self.name_edit.text(),
             "quantity": int(self.quantity_edit.text()),
-            "expiry_date": self.expiry_date_edit.text(),
+            "expiry_date": self.expiry_date_edit.date().toString("yyyy-MM-dd"),
             "weight": float(self.weight_edit.text()),
             "ordered": int(self.ordered_checkbox.isChecked())
         }
@@ -161,5 +206,5 @@ class RemoveItemDialog(QDialog):
 if __name__ == '__main__':
     app = QApplication([])
     window = fridgeWindow()
-    #window.show()
+    window.show()
     app.exec_()
