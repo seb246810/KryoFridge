@@ -120,6 +120,19 @@
      <string>Please select your role to continue:</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBoxColorblindMode">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>0</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Colorblind Mode</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
