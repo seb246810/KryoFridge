@@ -10,6 +10,7 @@ from PyQt5.QtCore import QTimer
 import sqlite3
 import math, random
 from fridge import *
+from Roleselection import *
 
 
 class driverLogin(QWidget):
@@ -20,23 +21,31 @@ class driverLogin(QWidget):
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)  # hides user input password
         self.show()
 
+
         self.LoginButton.clicked.connect(self.driverLoginFunction)
         self.RegisterButton.clicked.connect(self.driverRegisterWindow)
-        self.BackButton.clicked.connect(self.back)
+        self.BackBtn.clicked.connect(self.back)
 
         # connect to database
         self.conn = sqlite3.connect('deliveryusers.db')
         self.cursor = self.conn.cursor()
 
-        self.fridge = None
 
-    def gotofridge(self):
-        if not self.fridge:
-            self.fridge = fridgeWindow()
+
+    def gotofridge(self, role):
+            self.fridge = fridgeWindow(role = role)
             self.fridge.show()
             self.close()
 
-    # generates random 4 digit number
+    def back(self):
+        if self.entrypointWindow:
+            self.entrypointWindow.show()
+        self.close()
+
+
+
+
+        # generates random 4 digit number
     def getOTP(self):
         return ''.join(random.choice('0123456789') for _ in range(4))
 
@@ -46,11 +55,9 @@ class driverLogin(QWidget):
         welcome.setText(f"Welcome, {username}!")
         welcome.show()
 
-        timer = QTimer(welcome)
-        timer.timeout.connect(welcome.accept)
-        timer.start(1500)
+        QTimer.singleShot(1500, welcome.close)
+        QTimer.singleShot(1500, lambda: self.gotofridge('DeliveryDriver'))
 
-        timer.timeout.connect(self.gotofridge)
 
     def driverRegisterWindow(self):
         from driverRegistration import driverRegister
@@ -114,11 +121,7 @@ class driverLogin(QWidget):
         self.cursor.execute(update_query, (new_password, username))
         self.conn.commit()
 
-    def back(self):
-        # import entry2
-        # self.window = entry2.entrypoint()
-        self.close()
-        # self.window.show()
+
 
 class DriverIDDialog(QDialog):
     def __init__(self, parent=None):
@@ -138,3 +141,15 @@ class DriverIDDialog(QDialog):
 
     def getDriverId(self):
         return self.driverIdInput.text()
+
+
+if __name__ == '__main__':
+    app = QApplication([])
+    window = driverLogin()
+    window.show()
+    sys.exit(app.exec_())
+
+
+
+
+

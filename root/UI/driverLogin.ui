@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>459</width>
-    <height>450</height>
+    <height>408</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="BackButton">
+  <widget class="QPushButton" name="BackBtn">
    <property name="geometry">
     <rect>
      <x>10</x>

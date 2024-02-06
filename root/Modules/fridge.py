@@ -5,27 +5,29 @@ from PyQt5 import uic, QtGui
 from Roleselection import *
 from Headcheflogin import *
 from HeadchefRegistration import *
+from PurchaseOrder import *
 import sqlite3
 
 
-def user_role():
-    return 'HeadChef'
 
 
 class fridgeWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, role):
         super(fridgeWindow, self).__init__()
         uic.loadUi("../UI/fridge.ui", self)
 
         self.database()
-        self.user_role_access()
 
         self.ExitButton.clicked.connect(self.back)
         self.AddButton.clicked.connect(self.AddItemsToFridge)
         self.RemoveButton.clicked.connect(self.RemoveItemsFromFridge)
-        self.OrderButton.clicked.connect(self.MakePurchaseOrder)
+        self.OrderButton.clicked.connect(self.GoToPurchaseOrder)
         self.HealthReportButton.clicked.connect(self.HealthReport)
         self.NotificationButton.clicked.connect(self.alert)
+        self.role = role
+        self.user_role_access(self.role)
+
+
 
     def database(self):
         self.conn = sqlite3.connect('fridge.db')
@@ -90,28 +92,21 @@ class fridgeWindow(QMainWindow):
         finally:
             self.LoadFridgeContents()
 
-    def MakePurchaseOrder(self):
-        if user_role() != 'HeadChef':
-            QMessageBox.warning(self, "Access Denied", "You do not have the access to purchase order")
-            return
-        purchase_order = "Purchase Order\n\n"
-        self.cursor.execute("SELECT Name, Quantity FROM Fridge WHERE Ordered=0")
-        items = self.cursor.fetchall()
+    """def GoToPurchaseOrder(self):
+        if self.role == "HeadChef":
+            self.PurchaseOrder = PurchaseOrder()
+            self.PurchaseOrder.show() """
 
-        if not items:
-            QMessageBox.information(self, "No Order", "There are no items to order.")
-            return
-        for item in items:
-            name, quantity = item
-            purchase_order += f"Item: {name}, Quantity: {quantity}\n"
-        QMessageBox.information(self, "Purchase Order", purchase_order)
+    def GoToPurchaseOrder(self):
+        if self.role == 'HeadChef':
+             self.PurchaseOrder = PurchaseOrder()
+             self.PurchaseOrder.show()
 
-        self.cursor.execute("UPDATE Fridge SET Ordered=1 WHERE Ordered=0")
-        self.conn.commit()
-        self.LoadFridgeContents()
 
-    def HealthReport(self):#
-        if user_role() != 'HeadChef':
+
+
+    def HealthReport(self, role):#
+        if role != 'HeadChef':
             QMessageBox.warning(self, "Access Denied", "You do not have the access to View the Health Report")
             return
 
@@ -128,8 +123,8 @@ class fridgeWindow(QMainWindow):
 
         QMessageBox.information(self, "Health Report", health_status)
 
-    def alert(self):
-        if user_role() != 'HeadChef':
+    def alert(self, role):
+        if role != 'HeadChef':
             QMessageBox.warning(self, "Access Denied", "Only the Head Chef can check expiry dates.")
             return
 
@@ -153,9 +148,11 @@ class fridgeWindow(QMainWindow):
             QMessageBox.information(self, "Expiry Check", "No items are nearing expiry within the next 7 days.")
 
 
-    def user_role_access(self):
-        current_role = user_role()
+    def user_role_access(self, role):
+        current_role = role
         self.AddButton.setEnabled(current_role in ['HeadChef', 'DeliveryDriver'])
+        """if current_role == "DeliveryDriver": waiting for the UI to be pushed
+           #t Self.Addbutton() """
         self.RemoveButton.setEnabled(current_role == 'HeadChef')
         self.OrderButton.setEnabled(current_role == 'HeadChef')
         self.HealthReportButton.setEnabled(current_role == 'HeadChef')

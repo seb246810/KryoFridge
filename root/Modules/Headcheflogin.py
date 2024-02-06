@@ -20,7 +20,7 @@ class Headcheflogin(QWidget):
         self.RegisterButton.clicked.connect(self.registerWindow)
         self.BackButton.clicked.connect(self.back)
 
-        # connect to database
+        # connect to database3
         self.conn = sqlite3.connect('headchefuser.db')
         self.cursor = self.conn.cursor()
 
@@ -36,15 +36,12 @@ class Headcheflogin(QWidget):
             )
         ''')
 
-        self.fridge = None
 
-    def gotofridge(self):
-        from fridge import fridgeWindow
-        if not self.fridge:
+    def gotofridge(self, role):
 
-            self.fridge = fridgeWindow()
-        self.hide()
+        self.fridge = fridgeWindow(role = role)
         self.fridge.show()
+        self.close()
 
     def registerWindow(self):
         from HeadchefRegistration import Headchefregister
@@ -54,8 +51,9 @@ class Headcheflogin(QWidget):
         self.cursor.execute(user_count_query)
         user_count = self.cursor.fetchone()[0]
 
-        # denies any head chef registers because there can only be one
+        # denies any head chef registers because there can only be
         # speech mark it out if not needed
+
 
         if user_count > 0:
             QMessageBox.warning(self, "Access Denied",
@@ -81,7 +79,7 @@ class Headcheflogin(QWidget):
                 new_password = password
                 self.update_user_password(username, new_password)
                 
-                self.gotofridge()
+                self.gotofridge('HeadChef')
 
      
                 
@@ -93,13 +91,20 @@ class Headcheflogin(QWidget):
         update_query = 'UPDATE users SET password=? WHERE username=?'
         self.cursor.execute(update_query, (new_password, username))
         self.conn.commit()
-        
+
+
     def back(self):
         #import entry2
         #self.window = entry2.entrypoint()
         self.close()
         #self.window.show()
     
+if __name__ == '__main__':
+    app = QApplication([])
+    window = Headcheflogin()
+    window.show()
+    sys.exit(app.exec_())
+
 
 
 
