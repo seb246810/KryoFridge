@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QLineEdit, QDialog, QWidget
 from PyQt5 import uic,QtGui
 import sqlite3
+import random
 from fridge import *
 
 
@@ -29,10 +30,11 @@ class Headcheflogin(QWidget):
 
         # create table for users if it does not exist yet
         self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+            CREATE TABLE IF NOT EXISTS user (
+                headchefID INTEGER,
                 username TEXT,
-                password TEXT
+                password TEXT,
+                role TEXT
             )
         ''')
 
@@ -50,7 +52,7 @@ class Headcheflogin(QWidget):
         from HeadchefRegistration import Headchefregister
 
         # checks number of users
-        user_count_query = 'SELECT COUNT(*) FROM users'
+        user_count_query = 'SELECT COUNT(*) FROM user'
         self.cursor.execute(user_count_query)
         user_count = self.cursor.fetchone()[0]
 
@@ -71,7 +73,7 @@ class Headcheflogin(QWidget):
             self.error.setText("Please input all fields.")
 
         else:
-            query = 'SELECT * FROM users WHERE username=? AND password=?'
+            query = 'SELECT * FROM user WHERE username=? AND password=?'
             self.cursor.execute(query, (username, password))
             user = self.cursor.fetchone()
 
@@ -80,6 +82,7 @@ class Headcheflogin(QWidget):
 
                 new_password = password
                 self.update_user_password(username, new_password)
+                self.update_user_role(username)
                 
                 self.gotofridge()
 
@@ -90,8 +93,13 @@ class Headcheflogin(QWidget):
 
     def update_user_password(self, username, new_password):
 
-        update_query = 'UPDATE users SET password=? WHERE username=?'
+        update_query = 'UPDATE user SET password=? WHERE username=?'
         self.cursor.execute(update_query, (new_password, username))
+        self.conn.commit()
+
+    def update_user_role(self, username):
+        update_query = 'UPDATE user SET role=? WHERE username=?'
+        self.cursor.execute(update_query, ('HeadChef', username))
         self.conn.commit()
         
     def back(self):

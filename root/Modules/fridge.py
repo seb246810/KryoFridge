@@ -11,6 +11,8 @@ import sqlite3
 def user_role():
     return 'HeadChef'
 
+current_role = user_role()
+print(f"Current Role: {current_role}")
 
 class fridgeWindow(QMainWindow):
     def __init__(self):
@@ -21,7 +23,7 @@ class fridgeWindow(QMainWindow):
         self.user_role_access()
 
         self.ExitButton.clicked.connect(self.back)
-        self.AddButton.clicked.connect(self.AddItemsToFridge)
+        self.AddButton.clicked.connect(self.deliveryDriveradd)
         self.RemoveButton.clicked.connect(self.RemoveItemsFromFridge)
         self.OrderButton.clicked.connect(self.MakePurchaseOrder)
         self.HealthReportButton.clicked.connect(self.HealthReport)
@@ -49,6 +51,15 @@ class fridgeWindow(QMainWindow):
             self.Db_Insertion(item_data)
             self.LoadFridgeContents()
 
+    def deliveryDriveradd(self):
+        from driverAdd import driverAddWindow
+        self.driverAdds = driverAddWindow()
+        self.driverAdds.show()
+
+    def add_items(self):
+        pass
+
+
     def Db_Insertion(self, item_data):
         try:
             self.cursor.execute('''INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight, Ordered) 
@@ -70,6 +81,7 @@ class fridgeWindow(QMainWindow):
             item_data = dialog.get_data()
             self.Db_Deletion(item_data)
             self.LoadFridgeContents()
+
     def Db_Deletion(self, item_data):
         try:
             self.cursor.execute("SELECT Quantity FROM Fridge WHERE Name=?", (item_data['name'],))

@@ -31,6 +31,7 @@ class driverLogin(QWidget):
         self.fridge = None
 
     def gotofridge(self):
+        from fridge import fridgeWindow
         if not self.fridge:
             self.fridge = fridgeWindow()
             self.fridge.show()

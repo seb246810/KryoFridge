@@ -19,14 +19,14 @@ class entrypoint(QMainWindow):
 
         self.Headchef.clicked.connect(self.loginScreen)
         self.Delivery.clicked.connect(self.driverLoginWindow)
-        self.staff.clicked.connect(self.signup)
+        self.staff.clicked.connect(self.staffAccess)
 
     def loginScreen(self):
         self.login = Headcheflogin()
 
-    def signup(self):
-        
-        self.window = Headchefregister()
+    def staffAccess(self):
+        from fridge import fridgeWindow
+        self.window = fridgeWindow()
         #self.close()
         self.window.show()
 
