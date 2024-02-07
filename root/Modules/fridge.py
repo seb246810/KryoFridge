@@ -228,8 +228,3 @@ class RemoveItemDialog(QDialog):
             "quantity": int(self.quantity_edit.text())
         }
 
-if __name__ == '__main__':
-    app = QApplication([])
-    window = fridgeWindow('HeadChef')
-    window.show()
-    app.exec_()

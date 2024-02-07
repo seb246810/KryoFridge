@@ -24,17 +24,18 @@ class driverAddWindow(QWidget):
         qty = self.quantityfield.toPlainText()
         weight = self.weightfield.toPlainText()
         expiryDate = self.expiryDate.date().toString("yyyy-MM-dd")
-        
+        DeliveryID = self.DeliveryIDfield.toPlainText()
+
         # item name validation (no numbers)
         if re.search(r'\d', item):
             self.error.setText("Item can't contain numbers")
             return
-        
+
         # quantity validation (only numbers)
         elif qty and not qty.isdigit():
             self.error.setText("Quantity must be a valid number")
             return
-        
+
         # weight validation (only numbers)
         elif weight and not weight.isdigit():
             self.error.setText("Weight must be a valid number")
@@ -45,33 +46,35 @@ class driverAddWindow(QWidget):
             self.error.setText("Please input all fields")
             return
 
-       # if item field is empty 
+        # if item field is empty
         elif not item:
             self.error.setText("Enter a food item name")
             return
-    
+        elif not DeliveryID:
+            self.error.setText("Enter a OrderID")
+            return
+
         # if quantity field is empty.
         elif not qty:
             self.error.setText("Enter quantity")
             return
-        
+
         elif not weight:
             self.error.setText("Enter weight")
             return
-        
+
         self.error.clear()
 
-        DeliveryID = str(uuid.uuid4())
         # Insert data into the fridge database
         try:
-            query = "INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight, DeliveryID) VALUES (?, ?, ?, ?, ?)"
+            query = "INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight, OrderID) VALUES (?, ?, ?, ?, ?)"
             self.cursor.execute(query, (item, qty, expiryDate, weight, DeliveryID))
             self.conn.commit()
             QMessageBox.information(self, "Success", "Item added to fridge database.")
         except sqlite3.Error as e:
             QMessageBox.critical(self, "Error", f"Database error: {str(e)}")
 
-        def OrderReceived(self):
+    def OrderReceived(self):
             # insert code to read database for what the headchef ordered
             pass
 

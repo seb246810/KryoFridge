@@ -113,9 +113,3 @@ class PurchaseOrder(QtWidgets.QWidget):
 
 
         self.row_count += 1
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    window = PurchaseOrder()
-    window.show()
-    sys.exit(app.exec_())
