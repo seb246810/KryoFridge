@@ -8,6 +8,8 @@ from HeadchefRegistration import *
 from PurchaseOrder import *
 import sqlite3
 
+def user_role():
+    return role
 
 
 #current_role = user_role()

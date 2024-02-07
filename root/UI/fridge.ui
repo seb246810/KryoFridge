@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -55,7 +58,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>100</x>
       <y>300</y>
       <width>58</width>
       <height>31</height>
@@ -71,7 +74,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>200</x>
       <y>300</y>
       <width>58</width>
       <height>31</height>
@@ -87,7 +90,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>300</x>
       <y>300</y>
       <width>58</width>
       <height>31</height>
@@ -113,19 +116,6 @@
      <string>HealthReport</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="BackButton">
-    <property name="geometry">
-     <rect>
-      <x>330</x>
-      <y>300</y>
-      <width>58</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Back</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="ExitButton">
     <property name="geometry">
      <rect>
@@ -136,7 +126,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Exit</string>
+     <string>Back</string>
     </property>
    </widget>
    <widget class="QLabel" name="WeightLimit">
@@ -179,7 +169,7 @@
      <x>0</x>
      <y>0</y>
      <width>443</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
