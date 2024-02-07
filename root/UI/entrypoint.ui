@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>499</width>
+    <width>443</width>
     <height>407</height>
    </rect>
   </property>
@@ -14,127 +14,109 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QStackedWidget" name="stackedWidget">
+   <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>-20</y>
-      <width>501</width>
-      <height>401</height>
+      <x>70</x>
+      <y>30</y>
+      <width>321</width>
+      <height>61</height>
      </rect>
     </property>
-    <widget class="QWidget" name="page">
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>30</y>
-        <width>311</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-        <pointsize>20</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Welcome to the Kryo </string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>100</x>
-        <y>140</y>
-        <width>231</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-       </font>
-      </property>
-      <property name="text">
-       <string>Please select your role to continue:</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="DeliveryBtn">
-      <property name="geometry">
-       <rect>
-        <x>200</x>
-        <y>180</y>
-        <width>101</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-       </font>
-      </property>
-      <property name="text">
-       <string>Delivery driver</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="StaffBtn">
-      <property name="geometry">
-       <rect>
-        <x>340</x>
-        <y>180</y>
-        <width>101</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-       </font>
-      </property>
-      <property name="text">
-       <string>Staff</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="HeadchefBtn">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>180</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Helvetica</family>
-       </font>
-      </property>
-      <property name="text">
-       <string>Head Chef</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>120</x>
-        <y>80</y>
-        <width>261</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>20</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Fridge Application</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_2"/>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Welcome to Kryo Fridge Application</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Headchef">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>150</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Head Chef</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Delivery">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>150</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Delivery driver</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="staff">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>150</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Normal staff</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>110</y>
+      <width>231</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Helvetica</family>
+     </font>
+    </property>
+    <property name="text">
+     <string>Please select your role to continue:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBoxColorblindMode">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>0</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Colorblind Mode</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -142,8 +124,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>499</width>
-     <height>26</height>
+     <width>443</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEntrypoint">

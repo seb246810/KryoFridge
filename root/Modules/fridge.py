@@ -10,6 +10,8 @@ import sqlite3
 
 
 
+current_role = user_role()
+print(f"Current Role: {current_role}")
 
 class fridgeWindow(QMainWindow):
     def __init__(self, role):
@@ -19,7 +21,7 @@ class fridgeWindow(QMainWindow):
         self.database()
 
         self.ExitButton.clicked.connect(self.back)
-        self.AddButton.clicked.connect(self.AddItemsToFridge)
+        self.AddButton.clicked.connect(self.deliveryDriveradd)
         self.RemoveButton.clicked.connect(self.RemoveItemsFromFridge)
         self.OrderButton.clicked.connect(self.GoToPurchaseOrder)
         self.HealthReportButton.clicked.connect(self.HealthReport)
@@ -51,6 +53,15 @@ class fridgeWindow(QMainWindow):
             self.Db_Insertion(item_data)
             self.LoadFridgeContents()
 
+    def deliveryDriveradd(self):
+        from driverAdd import driverAddWindow
+        self.driverAdds = driverAddWindow()
+        self.driverAdds.show()
+
+    def add_items(self):
+        pass
+
+
     def Db_Insertion(self, item_data):
         try:
             self.cursor.execute('''INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight, Ordered) 
@@ -72,6 +83,7 @@ class fridgeWindow(QMainWindow):
             item_data = dialog.get_data()
             self.Db_Deletion(item_data)
             self.LoadFridgeContents()
+
     def Db_Deletion(self, item_data):
         try:
             self.cursor.execute("SELECT Quantity FROM Fridge WHERE Name=?", (item_data['name'],))
@@ -91,11 +103,6 @@ class fridgeWindow(QMainWindow):
             print("An error occurred:", e.args[0])
         finally:
             self.LoadFridgeContents()
-
-    """def GoToPurchaseOrder(self):
-        if self.role == "HeadChef":
-            self.PurchaseOrder = PurchaseOrder()
-            self.PurchaseOrder.show() """
 
     def GoToPurchaseOrder(self):
         if self.role == 'HeadChef':
@@ -151,8 +158,6 @@ class fridgeWindow(QMainWindow):
     def user_role_access(self, role):
         current_role = role
         self.AddButton.setEnabled(current_role in ['HeadChef', 'DeliveryDriver'])
-        """if current_role == "DeliveryDriver": waiting for the UI to be pushed
-           #t Self.Addbutton() """
         self.RemoveButton.setEnabled(current_role == 'HeadChef')
         self.OrderButton.setEnabled(current_role == 'HeadChef')
         self.HealthReportButton.setEnabled(current_role == 'HeadChef')
