@@ -71,3 +71,9 @@ class driverRegister(QWidget):
 
     def back(self):
         self.close()
+
+if __name__ == '__main__':
+    app = QApplication([])
+    window = driverRegister()
+    window.show()
+    app.exec_()

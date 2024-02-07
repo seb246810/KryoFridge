@@ -22,7 +22,7 @@ class driverLogin(QWidget):
 
         self.LoginButton.clicked.connect(self.driverLoginFunction)
         self.RegisterButton.clicked.connect(self.driverRegisterWindow)
-        self.BackButton.clicked.connect(self.back)
+        self.BackBtn.clicked.connect(self.back)
 
         # connect to database
         self.conn = sqlite3.connect('deliveryusers.db')
@@ -33,7 +33,7 @@ class driverLogin(QWidget):
     def gotofridge(self):
         from fridge import fridgeWindow
         if not self.fridge:
-            self.fridge = fridgeWindow()
+            self.fridge = fridgeWindow("DeliveryDriver")
             self.fridge.show()
             self.close()
 
@@ -139,3 +139,4 @@ class DriverIDDialog(QDialog):
 
     def getDriverId(self):
         return self.driverIdInput.text()
+

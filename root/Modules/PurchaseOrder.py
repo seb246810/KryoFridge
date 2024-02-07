@@ -1,9 +1,5 @@
-from PyQt5.QtCore import QDate, Qt
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QDialog, QWidget, \
-    QDialogButtonBox, QVBoxLayout, QFormLayout, QCheckBox, QTableWidgetItem, QDateEdit
-from PyQt5 import uic, QtGui
-from Roleselection import *
-from Headcheflogin import *
+import uuid
+
 from HeadchefRegistration import *
 from fridge import *
 import sqlite3
@@ -57,16 +53,17 @@ class PurchaseOrder(QtWidgets.QWidget):
     def MakePurchaseOrder(self):
         self.database()
         self.database2()
+        OrderID = str(uuid.uuid4())
 
         self.conn2.execute("BEGIN")
         Ordered = False
         try:
-            InsertionQuery = 'INSERT INTO "PurchaseOrder" ("Name", "Quantity", "OrderDate") VALUES (?, ?, ?)'
+            InsertionQuery = 'INSERT INTO "PurchaseOrder" ("Name", "Quantity", "OrderDate", "OrderID") VALUES (?, ?, ?, ?)'
 
             for row in range(1, self.row_count):
-                name_widget = self.dynamicGrid.itemAtPosition(row, 0).widget()
-                qty_widget = self.dynamicGrid.itemAtPosition(row, 1).widget()
-                date_widget = self.dynamicGrid.itemAtPosition(row, 2).widget()
+                name_widget = self.DynamicGrid.itemAtPosition(row, 0).widget()
+                qty_widget = self.DynamicGrid.itemAtPosition(row, 1).widget()
+                date_widget = self.DynamicGrid.itemAtPosition(row, 2).widget()
 
                 name = name_widget.text() if isinstance(name_widget, QtWidgets.QLineEdit) else None
                 QuantityText = qty_widget.text() if isinstance(qty_widget, QtWidgets.QLineEdit) else None
@@ -82,7 +79,7 @@ class PurchaseOrder(QtWidgets.QWidget):
                                         f"Invalid quantity '{QuantityText}' on row {row}. Please enter a valid number.")
                     continue
 
-                self.cursor2.execute(InsertionQuery, (name, quantity, OrderDate))
+                self.cursor2.execute(InsertionQuery, (name, quantity, OrderDate, OrderID))
                 self.cursor.execute("SELECT Ordered FROM Fridge WHERE Name = ?", (name,))
                 result = self.cursor.fetchone()
 
@@ -93,9 +90,9 @@ class PurchaseOrder(QtWidgets.QWidget):
 
             self.conn2.commit()
             if Ordered:
-                QMessageBox.information(self, "Both the Purchase Order and Fridge databases were updated successfully.")
+                QMessageBox.information(self, "Sucessful", "Both the Purchase Order and Fridge databases were updated successfully.")
             else:
-                QMessageBox.information(self, "The Purchase Order database was updated successfully.")
+                QMessageBox.information(self, "Sucessful", "The Purchase Order database was updated successfully.")
         except Exception as e:
 
             self.conn2.rollback()

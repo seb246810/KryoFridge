@@ -51,7 +51,7 @@
    </widget>
    <widget class="QPushButton" name="AddButton">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -67,7 +67,7 @@
    </widget>
    <widget class="QPushButton" name="RemoveButton">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -83,7 +83,7 @@
    </widget>
    <widget class="QPushButton" name="OrderButton">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -99,7 +99,7 @@
    </widget>
    <widget class="QPushButton" name="HealthReportButton">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -154,7 +154,7 @@
    </widget>
    <widget class="QPushButton" name="NotificationButton">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -179,7 +179,7 @@
      <x>0</x>
      <y>0</y>
      <width>443</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

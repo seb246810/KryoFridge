@@ -10,8 +10,8 @@ import sqlite3
 
 
 
-current_role = user_role()
-print(f"Current Role: {current_role}")
+#current_role = user_role()
+#print(f"Current Role: {current_role}")
 
 class fridgeWindow(QMainWindow):
     def __init__(self, role):
@@ -27,8 +27,6 @@ class fridgeWindow(QMainWindow):
         self.HealthReportButton.clicked.connect(self.HealthReport)
         self.NotificationButton.clicked.connect(self.alert)
         self.role = role
-        self.user_role_access(self.role)
-
 
 
     def database(self):
@@ -52,6 +50,8 @@ class fridgeWindow(QMainWindow):
             item_data = dialog.get_data()
             self.Db_Insertion(item_data)
             self.LoadFridgeContents()
+
+
 
     def deliveryDriveradd(self):
         from driverAdd import driverAddWindow
@@ -105,15 +105,18 @@ class fridgeWindow(QMainWindow):
             self.LoadFridgeContents()
 
     def GoToPurchaseOrder(self):
-        if self.role == 'HeadChef':
+        if self.role != 'HeadChef':
+            QMessageBox.warning(self, "Access Denied", "Only the Head Chef can make Purchase Orders!.")
+            return
+        else:
              self.PurchaseOrder = PurchaseOrder()
              self.PurchaseOrder.show()
 
 
 
 
-    def HealthReport(self, role):#
-        if role != 'HeadChef':
+    def HealthReport(self):
+        if self.role != 'HeadChef':
             QMessageBox.warning(self, "Access Denied", "You do not have the access to View the Health Report")
             return
 
@@ -130,8 +133,8 @@ class fridgeWindow(QMainWindow):
 
         QMessageBox.information(self, "Health Report", health_status)
 
-    def alert(self, role):
-        if role != 'HeadChef':
+    def alert(self):
+        if self.role != 'HeadChef':
             QMessageBox.warning(self, "Access Denied", "Only the Head Chef can check expiry dates.")
             return
 
@@ -154,14 +157,6 @@ class fridgeWindow(QMainWindow):
         else:
             QMessageBox.information(self, "Expiry Check", "No items are nearing expiry within the next 7 days.")
 
-
-    def user_role_access(self, role):
-        current_role = role
-        self.AddButton.setEnabled(current_role in ['HeadChef', 'DeliveryDriver'])
-        self.RemoveButton.setEnabled(current_role == 'HeadChef')
-        self.OrderButton.setEnabled(current_role == 'HeadChef')
-        self.HealthReportButton.setEnabled(current_role == 'HeadChef')
-        self.NotificationButton.setEnabled(current_role == 'HeadChef')
 
     def back(self):
         self.conn.close()
@@ -233,6 +228,6 @@ class RemoveItemDialog(QDialog):
 
 if __name__ == '__main__':
     app = QApplication([])
-    window = fridgeWindow()
+    window = fridgeWindow('HeadChef')
     window.show()
     app.exec_()

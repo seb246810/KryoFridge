@@ -61,10 +61,11 @@ class driverAddWindow(QWidget):
         
         self.error.clear()
 
+        DeliveryID = str(uuid.uuid4())
         # Insert data into the fridge database
         try:
-            query = "INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight) VALUES (?, ?, ?, ?)"
-            self.cursor.execute(query, (item, qty, expiryDate, weight))
+            query = "INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight, DeliveryID) VALUES (?, ?, ?, ?, ?)"
+            self.cursor.execute(query, (item, qty, expiryDate, weight, DeliveryID))
             self.conn.commit()
             QMessageBox.information(self, "Success", "Item added to fridge database.")
         except sqlite3.Error as e:
@@ -77,9 +78,5 @@ class driverAddWindow(QWidget):
         # add functionality if driver input does not match with headchef ordered database
         
             
-        
-
-            
-
 
 
