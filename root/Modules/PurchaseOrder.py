@@ -9,6 +9,7 @@ class PurchaseOrder(QtWidgets.QWidget):
         super(PurchaseOrder, self).__init__()
         uic.loadUi("../UI/PurchaseOrder.ui", self)
 
+    # creation of the scroll area
         self.scrollWidget = QtWidgets.QWidget()
         self.scrollArea.setWidget(self.scrollWidget)
         self.scrollArea.setWidgetResizable(True)

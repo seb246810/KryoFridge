@@ -148,7 +148,7 @@ class fridgeWindow(QMainWindow):
             self.LoadFridgeContents()
 
     def GoToPurchaseOrder(self):
-        if self.role != 'HeadChef':
+        if self.role != 'DeliveryDriver':
             QMessageBox.warning(self, "Access Denied", "Only the Head Chef can make Purchase Orders!.")
             return
         elif self.role == 'Staff':
