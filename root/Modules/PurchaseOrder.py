@@ -130,3 +130,4 @@ class PurchaseOrder(QtWidgets.QWidget):
 
 
         self.row_count += 1
+
