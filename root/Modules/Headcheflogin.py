@@ -45,8 +45,10 @@ class Headcheflogin(QWidget):
     def ToggleColorblindMode(self, state):
         if state == 2:
             self.ApplyColorblindPalette()
+            return True
         else:
             self.ApplyNormalPalette()
+            return False
 
     def ApplyColorblindPalette(self):
         palette = QPalette()
@@ -61,9 +63,10 @@ class Headcheflogin(QWidget):
         from fridge import fridgeWindow
         if not self.fridge:
 
-            self.fridge = fridgeWindow()
+            self.fridge = fridgeWindow("HeadChef")
         self.hide()
         self.fridge.show()
+        return self.fridge
 
     def registerWindow(self):
         from HeadchefRegistration import Headchefregister
