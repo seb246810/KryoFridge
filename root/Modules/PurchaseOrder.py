@@ -1,5 +1,7 @@
 import uuid
 
+from PyQt5.QtGui import QPalette
+
 from HeadchefRegistration import *
 from fridge import *
 import sqlite3
@@ -9,6 +11,7 @@ class PurchaseOrder(QtWidgets.QWidget):
         super(PurchaseOrder, self).__init__()
         uic.loadUi("../UI/PurchaseOrder.ui", self)
 
+    # creation of the scroll area
         self.scrollWidget = QtWidgets.QWidget()
         self.scrollArea.setWidget(self.scrollWidget)
         self.scrollArea.setWidgetResizable(True)
@@ -40,6 +43,9 @@ class PurchaseOrder(QtWidgets.QWidget):
         self.addRow()
         self.addRow()
 
+    def GenerateOrderID(self):
+        return ''.join(random.choice('0123456789') for _ in range(6))
+
 
     def ToggleColorblindMode(self, state):
         if state == 2:
@@ -70,7 +76,7 @@ class PurchaseOrder(QtWidgets.QWidget):
     def MakePurchaseOrder(self):
         self.database()
         self.database2()
-        OrderID = str(uuid.uuid4())
+        OrderID = self.GenerateOrderID()
 
         self.conn2.execute("BEGIN")
         Ordered = False
@@ -107,9 +113,9 @@ class PurchaseOrder(QtWidgets.QWidget):
 
             self.conn2.commit()
             if Ordered:
-                QMessageBox.information(self, "Sucessful", "Both the Purchase Order and Fridge databases were updated successfully.")
+                QMessageBox.information(self, "Successful", "Both the Purchase Order and Fridge databases were updated successfully.")
             else:
-                QMessageBox.information(self, "Sucessful", "The Purchase Order database was updated successfully.")
+                QMessageBox.information(self, "Successful", "The Purchase Order database was updated successfully.")
         except Exception as e:
 
             self.conn2.rollback()

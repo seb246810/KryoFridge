@@ -46,17 +46,32 @@ class driverRegister(QWidget):
         self.conn = sqlite3.connect('deliveryusers.db')
         self.cursor = self.conn.cursor()
 
+    def validate_password(self, password):
+        """ Validate the password. """
+        if len(password) < 6:
+            return "Password must be at least 6 characters long."
+        if not re.search(r'\d', password):
+            return "Password must include at least one number."
+        return None
+
     def registerFunction(self):
         user = self.usernamefield.text()
         password = self.passwordfield.text()
         confirm = self.confirmfield.text()
 
-        if len(user)==0 or len(password)==0 or len(confirm)==0:
-            QMessageBox.warning("Please fill in all inputs.")
+        if len(user) == 0 or len(password) == 0 or len(confirm) == 0:
+            QMessageBox.warning(self, "Input Error", "Please fill in all inputs.")
+            return
 
-        elif password != confirm:
-            QMessageBox.warning("Passwords do not match.")
-        else:
+        password_validation_error = self.validate_password(password)
+
+        if password_validation_error:
+            QMessageBox.warning(self, "Input Error", password_validation_error)
+            return
+        if password != confirm:
+            QMessageBox.warning(self, "Input Error", "Passwords do not match.")
+            return
+
             self.registerDriver(user,password)
 
     def registerDriver(self,user,password):
