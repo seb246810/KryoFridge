@@ -1,3 +1,5 @@
+import sqlite3
+
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QWidget
 from PyQt5 import uic,QtGui
 from fridge import *
@@ -13,6 +15,23 @@ class Headchefregister(QMainWindow):
 
         self.BackButton.clicked.connect(self.back)
         self.registerbutton.clicked.connect(self.registerFunction)
+
+        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
+
+    def ToggleColorblindMode(self, state):
+        if state == 2:
+            self.ApplyColorblindPalette()
+        else:
+            self.ApplyNormalPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
+    def ApplyNormalPalette(self):
+        self.setPalette(self.style().standardPalette())
 
     def generate_unique_headchefID(self):
         conn = sqlite3.connect('headchefuser.db')

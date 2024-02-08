@@ -29,6 +29,7 @@ class PurchaseOrder(QtWidgets.QWidget):
         self.CreateBtn = QtWidgets.QPushButton("Create Button")
         self.ButtonLayout.addWidget(self.PushBtn)
         self.ButtonLayout.addWidget(self.CreateBtn)
+        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
 
         self.PushBtn.clicked.connect(self.addRow)
         self.CreateBtn.clicked.connect(self.MakePurchaseOrder)
@@ -38,6 +39,22 @@ class PurchaseOrder(QtWidgets.QWidget):
         self.row_count = 1
         self.addRow()
         self.addRow()
+
+
+    def ToggleColorblindMode(self, state):
+        if state == 2:
+            self.ApplyColorblindPalette()
+        else:
+            self.ApplyNormalPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
+    def ApplyNormalPalette(self):
+        self.setPalette(self.style().standardPalette())
 
     def database2(self):
         self.conn2 = sqlite3.connect('PurchaseOrder.db')

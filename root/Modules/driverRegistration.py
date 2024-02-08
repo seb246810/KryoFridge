@@ -4,6 +4,7 @@ import hashlib
 import os
 
 from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QDialog
 from PyQt5 import uic,QtGui
 from Roleselection import *
@@ -23,6 +24,23 @@ class driverRegister(QWidget):
 
         self.BackButton.clicked.connect(self.back)
         self.registerbutton.clicked.connect(self.registerFunction)
+
+        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
+
+    def ToggleColorblindMode(self, state):
+        if state == 2:
+            self.ApplyColorblindPalette()
+        else:
+            self.ApplyNormalPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
+    def ApplyNormalPalette(self):
+        self.setPalette(self.style().standardPalette())
 
     def database(self):
         self.conn = sqlite3.connect('deliveryusers.db')
@@ -72,8 +90,3 @@ class driverRegister(QWidget):
     def back(self):
         self.close()
 
-if __name__ == '__main__':
-    app = QApplication([])
-    window = driverRegister()
-    window.show()
-    app.exec_()

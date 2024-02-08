@@ -30,6 +30,23 @@ class driverLogin(QWidget):
 
         self.fridge = None
 
+        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
+
+    def ToggleColorblindMode(self, state):
+        if state == 2:
+            self.ApplyColorblindPalette()
+        else:
+            self.ApplyNormalPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
+    def ApplyNormalPalette(self):
+        self.setPalette(self.style().standardPalette())
+
     def gotofridge(self):
         from fridge import fridgeWindow
         if not self.fridge:

@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QDialog, QWidget, \
     QDialogButtonBox, QVBoxLayout, QFormLayout, QCheckBox, QTableWidgetItem, QDateEdit
 from PyQt5 import uic, QtGui
@@ -8,8 +9,7 @@ from HeadchefRegistration import *
 from PurchaseOrder import *
 import sqlite3
 
-def user_role():
-    return role
+
 
 
 #current_role = user_role()
@@ -29,6 +29,38 @@ class fridgeWindow(QMainWindow):
         self.HealthReportButton.clicked.connect(self.HealthReport)
         self.NotificationButton.clicked.connect(self.alert)
         self.role = role
+
+        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
+
+        def ToggleColorblindMode(self, state):
+            if state == 2:
+                self.ApplyColorblindPalette()
+            else:
+                self.ApplyNormalPalette()
+
+        def ApplyColorblindPalette(self):
+            palette = QPalette()
+            palette.setColor(QPalette.Window, QColor("blue"))
+            palette.setColor(QPalette.WindowText, QColor("red"))
+            self.setPalette(palette)
+
+        def ApplyNormalPalette(self):
+            self.setPalette(self.style().standardPalette())# self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
+
+    def ToggleColorblindMode(self, state):
+        if state == 2:
+            self.ApplyColorblindPalette()
+        else:
+            self.ApplyNormalPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
+    def ApplyNormalPalette(self):
+        self.setPalette(self.style().standardPalette())
 
 
     def database(self):
