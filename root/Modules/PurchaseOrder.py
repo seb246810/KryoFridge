@@ -1,5 +1,7 @@
 import uuid
 
+from PyQt5.QtGui import QPalette
+
 from HeadchefRegistration import *
 from fridge import *
 import sqlite3
@@ -111,9 +113,9 @@ class PurchaseOrder(QtWidgets.QWidget):
 
             self.conn2.commit()
             if Ordered:
-                QMessageBox.information(self, "Sucessful", "Both the Purchase Order and Fridge databases were updated successfully.")
+                QMessageBox.information(self, "Successful", "Both the Purchase Order and Fridge databases were updated successfully.")
             else:
-                QMessageBox.information(self, "Sucessful", "The Purchase Order database was updated successfully.")
+                QMessageBox.information(self, "Successful", "The Purchase Order database was updated successfully.")
         except Exception as e:
 
             self.conn2.rollback()

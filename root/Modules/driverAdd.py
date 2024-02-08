@@ -1,4 +1,6 @@
 import sys
+import traceback
+
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPalette, QColor
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QLineEdit, QDialog, QWidget
@@ -19,6 +21,10 @@ class driverAddWindow(QWidget):
         self.conn2 = sqlite3.connect('DeliveryLog.db')
         self.cursor2 = self.conn2.cursor()
 
+        self.conn3 = sqlite3.connect('PurchaseOrder.db')
+        self.cursor3 = self.conn3.cursor()
+
+
 
         self.submitButton.clicked.connect(self.addingItems)
         # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
@@ -28,6 +34,7 @@ class driverAddWindow(QWidget):
             self.ApplyColorblindPalette()
         else:
             self.ApplyNormalPalette()
+
 
     def ApplyColorblindPalette(self):
         palette = QPalette()
@@ -44,7 +51,7 @@ class driverAddWindow(QWidget):
         qty = self.quantityfield.toPlainText()
         weight = self.weightfield.toPlainText()
         expiryDate = self.expiryDate.date().toString("yyyy-MM-dd")
-        DeliveryID = self.DeliveryIDfield.toPlainText()
+        deliveryid = self.deliveryfield.toPlainText()
 
         # item name validation (no numbers)
         if re.search(r'\d', item):
@@ -66,11 +73,17 @@ class driverAddWindow(QWidget):
             self.error.setText("Please input all fields")
             return
 
+        elif deliveryid and not deliveryid.isdigit():
+            self.error.setText("Order ID must be a valid number")
+            return
+
         # if item field is empty
         elif not item:
             self.error.setText("Enter a food item name")
             return
-        elif not DeliveryID:
+
+        # if delivery id is empty
+        elif not deliveryid:
             self.error.setText("Enter a OrderID")
             return
 
@@ -83,27 +96,59 @@ class driverAddWindow(QWidget):
             self.error.setText("Enter weight")
             return
 
+        self.cursor3.execute("SELECT 1 FROM PurchaseOrder WHERE OrderID = ?", (deliveryid,))
+        if not self.cursor3.fetchone():
+            QMessageBox.critical(self, "Error", "Order ID inputted does not exist in the Purchase Order database.")
+            return
+
+
+
         self.error.clear()
 
-        # Insert data into the fridge database
+
         try:
             query = "INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight) VALUES (?, ?, ?, ?)"
-            query2 = "INSERT INTO DeliveryLog (Name, Quantity, DeliveryID) VALUES (?, ?, ?)"
             self.cursor.execute(query, (item, qty, expiryDate, weight))
             self.conn.commit()
-            self.cursor2.execute((query2,item,qty,DeliveryID))
-            self.conn2.commit()
             QMessageBox.information(self, "Success", "Item added to fridge database.")
-            QMessageBox.information(self, "Success", "Delivery Has Been Logged Successfully.")
         except sqlite3.Error as e:
+            self.conn.rollback()
             QMessageBox.critical(self, "Error", f"Database error: {str(e)}")
+        try:
+            query2 = "INSERT INTO DeliveryLog (Name, Quantity, DeliveryID) VALUES (?, ?, ?)"
+            self.cursor2.execute(query2, (item, qty, deliveryid))
+            self.conn2.commit()
+            self.OrderReceived(deliveryid)
+            QMessageBox.information(self, "Success", "Delivery Has Been Logged Successfully.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"DeliveryLog database error: {str(e)}")
 
-    def OrderReceived(self):
-            # insert code to read database for what the headchef ordered
-            pass
 
-        # add functionality if driver input does not match with headchef ordered database
-        
-            
+    def OrderReceived(self, deliveryID):
+            self.cursor3.execute("SELECT Name, Quantity FROM PurchaseOrder WHERE OrderID = ?", (deliveryID,))
+            Order = self.cursor3.fetchall()
+
+            Ordered = {name: qty for name, qty in Order}
+
+            self.cursor2.execute("SELECT Name, Quantity FROM DeliveryLog WHERE DeliveryID = ?", (deliveryID,))
+            Deliveries = self.cursor2.fetchall()
+
+            Delivered = {name: qty for name, qty in Deliveries}
+
+
+            Inconsistencies = []
+            for name, ordered_qty in Ordered.items():
+                delivered_qty = Delivered.get(name, 0)
+                if ordered_qty != delivered_qty:
+                    Inconsistencies.append(f"Item: {name}, Ordered: {ordered_qty}, Delivered: {delivered_qty}")
+
+            if Inconsistencies:
+                InconsistenciesMessage = "\n".join(Inconsistencies)
+                QMessageBox.warning(self, "Order Discrepancies",
+                                    "There are discrepancies in the order:\n" + InconsistenciesMessage)
+            else:
+                QMessageBox.information(self, "Order Verification", "All items match the order.")
+
+
 
 
