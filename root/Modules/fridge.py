@@ -85,9 +85,17 @@ class fridgeWindow(QMainWindow):
 
 
     def deliveryDriveradd(self):
-        from driverAdd import driverAddWindow
-        self.driverAdds = driverAddWindow()
-        self.driverAdds.show()
+        if self.role == 'HeadChef':
+            self.AddItemsToFridge()
+        
+        elif self.role == 'DeliveryDriver':
+            from driverAdd import driverAddWindow
+            self.driverAdds = driverAddWindow()
+            self.driverAdds.show()
+
+        else:
+            QMessageBox.warning(self, "Access Denied", "You don't have permission to add items in the fridge.")
+
 
     def add_items(self):
         pass
@@ -109,11 +117,15 @@ class fridgeWindow(QMainWindow):
             self.LoadFridgeContents()
 
     def RemoveItemsFromFridge(self):
-        dialog = RemoveItemDialog()
-        if dialog.exec_() == QDialog.Accepted:
-            item_data = dialog.get_data()
-            self.Db_Deletion(item_data)
-            self.LoadFridgeContents()
+        if self.role != 'HeadChef':
+            QMessageBox.warning(self, "Access Denied", "Only the Head Chef can remove items.")
+            return
+        else:   
+            dialog = RemoveItemDialog()
+            if dialog.exec_() == QDialog.Accepted:
+                item_data = dialog.get_data()
+                self.Db_Deletion(item_data)
+                self.LoadFridgeContents()
 
     def Db_Deletion(self, item_data):
         try:
@@ -139,6 +151,10 @@ class fridgeWindow(QMainWindow):
         if self.role != 'HeadChef':
             QMessageBox.warning(self, "Access Denied", "Only the Head Chef can make Purchase Orders!.")
             return
+        elif self.role == 'Staff':
+            QMessageBox.warning(self, "Access Denied", "Only the Head Chef can make Purchase Orders!.")
+            return
+        
         else:
              self.PurchaseOrder = PurchaseOrder()
              self.PurchaseOrder.show()
