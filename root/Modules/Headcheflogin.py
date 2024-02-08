@@ -40,33 +40,13 @@ class Headcheflogin(QWidget):
 
         self.fridge = None
 
-        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
-
-    def ToggleColorblindMode(self, state):
-        if state == 2:
-            self.ApplyColorblindPalette()
-            return True
-        else:
-            self.ApplyNormalPalette()
-            return False
-
-    def ApplyColorblindPalette(self):
-        palette = QPalette()
-        palette.setColor(QPalette.Window, QColor("blue"))
-        palette.setColor(QPalette.WindowText, QColor("red"))
-        self.setPalette(palette)
-
-    def ApplyNormalPalette(self):
-        self.setPalette(self.style().standardPalette())
-
     def gotofridge(self):
         from fridge import fridgeWindow
         if not self.fridge:
 
-            self.fridge = fridgeWindow("HeadChef")
+            self.fridge = fridgeWindow()
         self.hide()
         self.fridge.show()
-        return self.fridge
 
     def registerWindow(self):
         from HeadchefRegistration import Headchefregister
@@ -101,23 +81,21 @@ class Headcheflogin(QWidget):
                 self.error.setText("Login Successful")
 
                 new_password = password
-                self.update_user_password(username, new_password)
-                self.update_user_role(username)
+                self.update_chef_password(username, new_password)
+                self.update_chef_role(username)
                 
                 self.gotofridge()
-
-     
                 
             else:
                 self.error.setText("Invalid username or password")
 
-    def update_user_password(self, username, new_password):
+    def update_chef_password(self, username, new_password):
 
         update_query = 'UPDATE user SET password=? WHERE username=?'
         self.cursor.execute(update_query, (new_password, username))
         self.conn.commit()
 
-    def update_user_role(self, username):
+    def update_chef_role(self, username):
         update_query = 'UPDATE user SET role=? WHERE username=?'
         self.cursor.execute(update_query, ('HeadChef', username))
         self.conn.commit()

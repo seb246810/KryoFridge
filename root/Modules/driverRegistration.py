@@ -63,6 +63,7 @@ class driverRegister(QWidget):
         driverId = self.generateId()
         salt = os.urandom(32)
         password_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+        
         try:
             self.cursor.execute('INSERT INTO deliverydriver(username, password, salt, driverId) VALUES (?, ?, ?, ?)',
                                 (user, password_hash.hex(), salt.hex(), driverId))
