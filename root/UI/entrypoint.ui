@@ -26,7 +26,7 @@
     <property name="font">
      <font>
       <family>Helvetica</family>
-      <pointsize>20</pointsize>
+      <pointsize>16</pointsize>
      </font>
     </property>
     <property name="text">
@@ -125,7 +125,7 @@
      <x>0</x>
      <y>0</y>
      <width>443</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEntrypoint">
