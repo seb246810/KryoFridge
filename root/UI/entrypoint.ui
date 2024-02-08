@@ -127,7 +127,7 @@
           <string notr="true">padding: 3;</string>
          </property>
          <property name="text">
-          <string>Normal staff</string>
+          <string>Staff</string>
          </property>
         </widget>
        </item>

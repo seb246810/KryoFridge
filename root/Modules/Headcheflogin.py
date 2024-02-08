@@ -1,4 +1,5 @@
 import sys
+import hashlib
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QLineEdit, QDialog, QWidget
 from PyQt5 import uic,QtGui
@@ -11,7 +12,7 @@ from fridge import *
 
 class Headcheflogin(QWidget):
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(Headcheflogin, self).__init__()
         uic.loadUi("../UI/ChefLogin.ui",self)
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password) #hides user input password
@@ -24,19 +25,6 @@ class Headcheflogin(QWidget):
         # connect to database
         self.conn = sqlite3.connect('headchefuser.db')
         self.cursor = self.conn.cursor()
-
-        # drop the 'users' table if it exists
-        self.cursor.execute('DROP TABLE IF EXISTS headchefuser')
-
-        # create table for users if it does not exist yet
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS user (
-                headchefID INTEGER,
-                username TEXT,
-                password TEXT,
-                role TEXT
-            )
-        ''')
 
         self.fridge = None
 
@@ -65,29 +53,28 @@ class Headcheflogin(QWidget):
         else:
             self.register = Headchefregister()
 
+    def hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
+
     def loginFunction(self):
         username = self.usernamefield.text()
         password = self.passwordfield.text()
 
-        if len(username)==0 or len(password)==0: # error message if there's no input
+        if len(username) == 0 or len(password) == 0: # error message if there's no input
             self.error.setText("Please input all fields.")
+            return
 
+        hashed_password = self.hash_password(password)
+
+        query = 'SELECT * FROM user WHERE username=?'
+        self.cursor.execute(query, (username,))
+        user = self.cursor.fetchone()
+
+        if user and user[2] == hashed_password:
+            self.error.setText("Login Successful")
+            self.gotofridge()
         else:
-            query = 'SELECT * FROM user WHERE username=? AND password=?'
-            self.cursor.execute(query, (username, password))
-            user = self.cursor.fetchone()
-
-            if user:
-                self.error.setText("Login Successful")
-
-                new_password = password
-                self.update_chef_password(username, new_password)
-                self.update_chef_role(username)
-                
-                self.gotofridge()
-                
-            else:
-                self.error.setText("Invalid username or password")
+            self.error.setText("Invalid username or password")
 
     def update_chef_password(self, username, new_password):
 
