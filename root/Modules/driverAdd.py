@@ -24,7 +24,7 @@ class driverAddWindow(QWidget):
         self.conn3 = sqlite3.connect('PurchaseOrder.db')
         self.cursor3 = self.conn3.cursor()
 
-
+        self.populatePurchaseOrders()
 
         self.submitButton.clicked.connect(self.addingItems)
         # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
@@ -102,6 +102,7 @@ class driverAddWindow(QWidget):
             return
 
 
+        self.close()
 
         self.error.clear()
 
@@ -122,6 +123,30 @@ class driverAddWindow(QWidget):
             QMessageBox.information(self, "Success", "Delivery Has Been Logged Successfully.")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"DeliveryLog database error: {str(e)}")
+
+    def populatePurchaseOrders(self):
+        try:
+            # Fetch purchase orders from the database
+            self.cursor3.execute("SELECT * FROM PurchaseOrder")
+            purchase_orders = self.cursor3.fetchall()
+
+            if purchase_orders:
+                print("Purchase orders fetched successfully:", purchase_orders)
+                
+                # Clear existing data in the table view
+                self.headchefordered.clearContents()
+                self.headchefordered.setRowCount(0)
+
+                # Populate data into the table view
+                for row_num, order in enumerate(purchase_orders):
+                    self.headchefordered.insertRow(row_num)
+                    for col_num, data in enumerate(order):
+                        item = QTableWidgetItem(str(data))
+                        self.headchefordered.setItem(row_num, col_num, item)
+            else:
+                print("No purchase orders found in the database.")
+        except sqlite3.Error as e:
+            QMessageBox.critical(self, "Error", f"An error occurred while fetching purchase orders: {str(e)}")
 
 
     def OrderReceived(self, deliveryID):

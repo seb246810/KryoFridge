@@ -84,6 +84,26 @@
      <height>131</height>
     </rect>
    </property>
+   <column>
+    <property name="text">
+     <string>Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Quantity</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>OrderDate</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>OrderID</string>
+    </property>
+   </column>
   </widget>
   <widget class="QTextEdit" name="quantityfield">
    <property name="geometry">

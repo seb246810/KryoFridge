@@ -1,9 +1,12 @@
 import uuid
 
-from PyQt5.QtGui import QPalette
-
+from PyQt5.QtGui import QPalette, QColor
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QMessageBox
 from HeadchefRegistration import *
 from fridge import *
+
+import random
 import sqlite3
 
 class PurchaseOrder(QtWidgets.QWidget):
@@ -116,6 +119,8 @@ class PurchaseOrder(QtWidgets.QWidget):
                 QMessageBox.information(self, "Successful", "Both the Purchase Order and Fridge databases were updated successfully.")
             else:
                 QMessageBox.information(self, "Successful", "The Purchase Order database was updated successfully.")
+                self.close()
+
         except Exception as e:
 
             self.conn2.rollback()
