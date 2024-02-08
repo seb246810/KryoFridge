@@ -92,8 +92,12 @@ class Headchefregister(QMainWindow):
             cur = conn.cursor()
             headchefID = self.generate_unique_headchefID()
             hashed_password = self.hash_password(password)
-            cur.execute('INSERT INTO user (headchefID, username, password) VALUES (?, ?, ?)',
-                        (headchefID, user, hashed_password))
+            role = "HeadChef"
+
+            # Include the role in the INSERT statement
+            cur.execute('INSERT INTO user (headchefID, username, password, role) VALUES (?, ?, ?, ?)',
+                        (headchefID, user, hashed_password, role))
+
             conn.commit()
             QMessageBox.information(self, "Success", "Head Chef registered successfully.")
             self.close()

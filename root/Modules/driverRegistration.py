@@ -72,7 +72,7 @@ class driverRegister(QWidget):
             QMessageBox.warning(self, "Input Error", "Passwords do not match.")
             return
 
-            self.registerDriver(user,password)
+        self.registerDriver(user,password)
 
     def registerDriver(self,user,password):
         driverId = self.generateId()
