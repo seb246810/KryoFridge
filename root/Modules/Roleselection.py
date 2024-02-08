@@ -5,9 +5,8 @@ from PyQt5 import QtWidgets
 from HeadchefRegistration import *
 from Headcheflogin import *
 from driverLogin import *
+from fridge import *
 import sqlite3
-
-
 
 
 class entrypoint(QMainWindow):
@@ -42,8 +41,10 @@ class entrypoint(QMainWindow):
         self.login = Headcheflogin()
 
     def staffAccess(self):
+        self.role = 'Staff'
         from fridge import fridgeWindow
         self.window = fridgeWindow()
+        
         #self.close()
         self.window.show()
 

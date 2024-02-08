@@ -68,6 +68,8 @@ class driverLogin(QWidget):
         timer.timeout.connect(welcome.accept)
         timer.start(1500)
 
+        self.update_driver_role(username)
+
         timer.timeout.connect(self.gotofridge)
 
     def driverRegisterWindow(self):
@@ -126,10 +128,15 @@ class driverLogin(QWidget):
             QMessageBox.critical(self, "Access Denied", "Incorrect OTP. Back to main menu.")
             self.close()
 
-    def update_user_password(self, username, new_password):
+    def update_driver_password(self, username, new_password):
 
         update_query = 'UPDATE deliverydriver SET password=? WHERE username=?'
         self.cursor.execute(update_query, (new_password, username))
+        self.conn.commit()
+
+    def update_driver_role(self, username):
+        update_query = 'UPDATE deliverydriver SET role=? WHERE username=?'
+        self.cursor.execute(update_query, ('DeliveryDriver', username))
         self.conn.commit()
 
     def back(self):

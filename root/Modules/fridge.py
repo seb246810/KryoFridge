@@ -9,14 +9,11 @@ from HeadchefRegistration import *
 from PurchaseOrder import *
 import sqlite3
 
-
-
-
 #current_role = user_role()
 #print(f"Current Role: {current_role}")
 
 class fridgeWindow(QMainWindow):
-    def __init__(self, role):
+    def __init__(self, role=None):
         super(fridgeWindow, self).__init__()
         uic.loadUi("../UI/fridge.ui", self)
 
