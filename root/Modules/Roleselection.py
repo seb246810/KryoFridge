@@ -4,7 +4,6 @@ from PyQt5 import uic,QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QSize
 from HeadchefRegistration import *
-from Headcheflogin import *
 from driverLogin import *
 from fridge import *
 import sqlite3
@@ -39,12 +38,12 @@ class entrypoint(QMainWindow):
         self.setPalette(self.style().standardPalette())
 
     def loginScreen(self):
+        from Headcheflogin import Headcheflogin
         self.login = Headcheflogin()
 
     def staffAccess(self):
-        self.role = 'Staff'
         from fridge import fridgeWindow
-        self.window = fridgeWindow()
+        self.window = fridgeWindow(role=None)
         
         #self.close()
         self.window.show()

@@ -9,9 +9,6 @@ from HeadchefRegistration import *
 from PurchaseOrder import *
 import sqlite3
 
-#current_role = user_role()
-#print(f"Current Role: {current_role}")
-
 class fridgeWindow(QMainWindow):
     def __init__(self, role=None):
         super(fridgeWindow, self).__init__()
@@ -26,6 +23,7 @@ class fridgeWindow(QMainWindow):
         self.HealthReportButton.clicked.connect(self.HealthReport)
         self.NotificationButton.clicked.connect(self.alert)
         self.role = role
+        print(role)
 
         # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
 

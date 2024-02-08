@@ -7,8 +7,6 @@ import random
 from fridge import *
 
 
-
-
 class Headcheflogin(QWidget):
 
     def __init__(self, parent = None):
@@ -43,8 +41,8 @@ class Headcheflogin(QWidget):
     def gotofridge(self):
         from fridge import fridgeWindow
         if not self.fridge:
+            self.fridge = fridgeWindow(role='HeadChef')
 
-            self.fridge = fridgeWindow()
         self.hide()
         self.fridge.show()
 
