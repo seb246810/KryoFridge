@@ -44,7 +44,7 @@ class Headcheflogin(QWidget):
         from fridge import fridgeWindow
         if not self.fridge:
 
-            self.fridge = fridgeWindow()
+            self.fridge = fridgeWindow('HeadChef')
         self.hide()
         self.fridge.show()
 

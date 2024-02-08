@@ -41,6 +41,9 @@ class PurchaseOrder(QtWidgets.QWidget):
         self.addRow()
         self.addRow()
 
+    def GenerateOrderID(self):
+        return ''.join(random.choice('0123456789') for _ in range(6))
+
 
     def ToggleColorblindMode(self, state):
         if state == 2:
@@ -71,7 +74,7 @@ class PurchaseOrder(QtWidgets.QWidget):
     def MakePurchaseOrder(self):
         self.database()
         self.database2()
-        OrderID = str(uuid.uuid4())
+        OrderID = self.GenerateOrderID()
 
         self.conn2.execute("BEGIN")
         Ordered = False

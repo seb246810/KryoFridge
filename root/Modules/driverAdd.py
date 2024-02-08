@@ -16,6 +16,9 @@ class driverAddWindow(QWidget):
         self.conn = sqlite3.connect('fridge.db')
         self.cursor = self.conn.cursor()
 
+        self.conn2 = sqlite3.connect('DeliveryLog.db')
+        self.cursor2 = self.conn2.cursor()
+
 
         self.submitButton.clicked.connect(self.addingItems)
         # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
@@ -84,10 +87,14 @@ class driverAddWindow(QWidget):
 
         # Insert data into the fridge database
         try:
-            query = "INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight, OrderID) VALUES (?, ?, ?, ?, ?)"
-            self.cursor.execute(query, (item, qty, expiryDate, weight, DeliveryID))
+            query = "INSERT INTO Fridge (Name, Quantity, Expiry_Date, Weight) VALUES (?, ?, ?, ?)"
+            query2 = "INSERT INTO DeliveryLog (Name, Quantity, DeliveryID) VALUES (?, ?, ?)"
+            self.cursor.execute(query, (item, qty, expiryDate, weight))
             self.conn.commit()
+            self.cursor2.execute((query2,item,qty,DeliveryID))
+            self.conn2.commit()
             QMessageBox.information(self, "Success", "Item added to fridge database.")
+            QMessageBox.information(self, "Success", "Delivery Has Been Logged Successfully.")
         except sqlite3.Error as e:
             QMessageBox.critical(self, "Error", f"Database error: {str(e)}")
 
