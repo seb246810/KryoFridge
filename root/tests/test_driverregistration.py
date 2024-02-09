@@ -36,7 +36,7 @@ def test_registerfunction_differentconfirmedpassword_test(register,qtbot):
         register.registerFunction()
 
         # Check if QMessageBox.warning() was called
-        mock_warning.assert_called_once_with(register,  "Passwords do not match.")
+        mock_warning.assert_called_once_with(register, "Input Error" ,"Passwords do not match.")
 
 
 def test_registerfunction_notextinput_test(register,qtbot):
@@ -50,7 +50,7 @@ def test_registerfunction_notextinput_test(register,qtbot):
         register.registerFunction()
 
         # Check if QMessageBox.warning() was called
-        mock_warning.assert_called_once_with(register,  "Please fill in all inputs.")
+        mock_warning.assert_called_once_with(register,"Input Error",  "Please fill in all inputs.")
 
 
 
@@ -68,14 +68,14 @@ def test_registerfunction_Onefieldnull_test(register,qtbot):
         register.registerFunction()
 
         # Check if QMessageBox.warning() was called
-        mock_warning.assert_called_once_with(register,  "Please fill in all inputs.")
+        mock_warning.assert_called_once_with(register,"Input Error" , "Please fill in all inputs.")
 
 
 
 def test_registerfunction_Correctfields_test(register,qtbot):
 
-    register.usernamefield.setText("barry")
-    register.passwordfield.setText("alan")
+    user="barry"
+    password="alan"
     register.confirmfield.setText("alan")
 
     username=register.usernamefield.text()
@@ -85,7 +85,11 @@ def test_registerfunction_Correctfields_test(register,qtbot):
 
    
 
-    register.registerFunction()
+    with patch.object(QMessageBox, 'information') as mock_warning:
+        register.registerDriver(user,password)
+
+        # Check if QMessageBox.warning() was called
+        mock_warning.assert_called_once_with( register, "Success", "Head Chef registered successfully.")
 
     def database(register):
         register.conn = sqlite3.connect('deliveryusers.db')
@@ -97,7 +101,7 @@ def test_registerfunction_Correctfields_test(register,qtbot):
     def accountexists(username):
     
 
-        query = 'SELECT * FROM  WHERE username=?'
+        query = 'SELECT * FROM deliverydriver WHERE username=?'
         register.cursor.execute(query, (username,))
         row = register.cursor.fetchone()
 
@@ -128,17 +132,51 @@ def test_registerfunction_Correctfields_test(register,qtbot):
 
 
 def test_useralreadyexists_test(register,qtbot):
-    user = "cat"
+    user="cat"
+    password="pat"
 
-    password= "don1"
+    #password= "don1"
 
+    user2 ="cat"
+    password2="don1"
+
+    username="cat"
+    
+    def database(register):
+        register.conn = sqlite3.connect('deliveryusers.db')
+        register.cursor = register.conn.cursor()
+
+    
+    
+    
+
+   
+
+   # register.registerFunction()
+
+    register.registerDriver(user,password)
+
+    database(register)
 
 
     with patch.object(QMessageBox, 'warning') as mock_warning:
         register.registerDriver(user,password)
 
         # Check if QMessageBox.warning() was called
-        mock_warning.assert_called_once_with(register,  "Error", f"Username {user} is already taken, please choose another.")
+        mock_warning.assert_called_once_with( register, "Error", f"Username {user} is already taken, please choose another.")
+        
+    database(register)
+
+    def accountdelete(username):
+
+        query = 'DELETE FROM deliverydriver WHERE username=?'
+        register.cursor.execute(query,(username,))
+        register.conn.commit()
+        row = register.cursor.fetchone()
+
+        return row is None
+    
+    assert accountdelete(username)
 
 
 

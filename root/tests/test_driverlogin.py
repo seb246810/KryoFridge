@@ -17,6 +17,8 @@ import driverLogin
 
 
 
+
+
     
     
 
@@ -40,27 +42,44 @@ def app(qtbot):
 
 @pytest.fixture
 
-def driverid(qtbot):
+def registeraccounts(qtbot):
+    import driverRegistration
   
     
 
-    idtag = driverLogin.DriverIDDialog()
-    qtbot.addWidget(idtag)
+    register = driverRegistration.driverRegister()
+    qtbot.addWidget(register)
 
-    return idtag
+    return register
 
+
+@pytest.fixture
+
+def driverid(qtbot):
+    
+  
+    
+
+    iddialog = driverLogin.DriverIDDialog()
+    qtbot.addWidget(iddialog)
+
+    return iddialog
 
 
 
 def test_Incorrectcredentials_test(app,qtbot):
     app.usernamefield.setText("bob") 
-    app.passwordfield.setText("123") 
+    app.passwordfield.setText("123") #set up test
 
 
 
-    qtbot.mouseClick(app.LoginButton,QtCore.Qt.LeftButton)
-    assert  app.error.text() =="Invalid username or password"
+    qtbot.mouseClick(app.LoginButton,QtCore.Qt.LeftButton) #execute test
+    
+    assert  app.error.text() =="Invalid username or password"  #assert error message is correct
     assert  app.isVisible()
+
+
+
 
 
 def test_nullcredentials_test(app,qtbot):
@@ -86,15 +105,37 @@ def test_onefieldFilled_test(app,qtbot):
    
 
 
-def test_correctcredentials_test(app,qtbot,driverid):
+def test_correctcredentials_test(app,qtbot,registeraccounts):
 
-   # monkeypatch.setattr(driverLogin, 'DriverIDDialog', MockDriverIDDialog)
+    def accountdelete(username):
+
+        query = 'DELETE FROM deliverydriver WHERE username=?'
+        app.cursor.execute(query,(username,))
+        app.conn.commit()
+        row = app.cursor.fetchone()
+
+        return row is None
+
+
+   
     assert app.isVisible()
    
     app.usernamefield.setText("seb")
-    app.passwordfield.setText("don1")
+    app.passwordfield.setText("don")      #setuptest
     username="seb"
+    password="don"
     storedId = 7966
+
+    registeraccounts.registerDriver(username,password)
+
+    def accountexists(username):
+    
+
+        query = 'SELECT * FROM deliverydriver WHERE username=?' 
+        app.cursor.execute(query, (username,))
+        row = app.cursor.fetchone()
+
+        return row is not None
 
     print("After creating DriverIDDialog:", app.isVisible())
 
@@ -104,85 +145,19 @@ def test_correctcredentials_test(app,qtbot,driverid):
    
 
 
-    qtbot.mouseClick(app.LoginButton,QtCore.Qt.LeftButton)
+    qtbot.mouseClick(app.LoginButton,QtCore.Qt.LeftButton) #execute test
 
 
-    def accountexists(username):
     
 
-        query = 'SELECT * FROM deliverydriver WHERE username=?'
-        app.cursor.execute(query, (username,))
-        row = app.cursor.fetchone()
-
-        return row is not None
-
-    #print("is visible", MockDriverIDDialog.isVisible())
-
-    #settingtext=driverid.mockDriverInputId.setText(str(storedId))
-
-
-    #assert mock_dialog is not None, "Mocked dialog not found in top-level widgets"
-
-    # Perform assertions related to the mock dialog
     
 
+
+    assert accountexists(username) #assert account exists in database
 
    
 
-
-
-
-    #dialog = qtbot.waitExposed(driverLogin.DriverIDDialog)
-    #dialog = qtbot.waitUntil(lambda: any(isinstance(widget, driverLogin.DriverIDDialog) for widget in QApplication.topLevelWidgets()))
-    #with qtbot.waitExposed(driverLogin.DriverIDDialog) as dialog:
-        # Check if the dialog is visible
-    #dialog.show()
-    assert accountexists(username)
-
-    #assert dialog.isVisible()
-    
-    #assert dialog.isVisible()
-    #assert dialog.isVisible()
-    #with qtbot.waitExposed(driverid):
-        # Perform assertions or inspection
-        #assert driverid.isVisible()  # Assuming driverid is the instance of DriverIDDialog
-        #assert app.error.text() == "Login Successful"
-
-    #driverid.setFocus()
-    #assert driverid.isVisible()
-    #assert settingtext == "7966"
-
-    
-    #mock_dialog = app.findChild(MockDriverIDDialog)
-    
-
-    #QTest.qWaitForWindowExposed(driverid)
-
-    
-    #print("Dialog isVisible:", mock_dialog.isVisible())
-    #print("Dialog isActiveWindow:", driverid.isActiveWindow())
-    #print("Dialog isTopLevel:", driverid.isTopLevel())
-    #print("Dialog windowState:", driverid.windowState())
-
-    
-    #qtbot.wait(100)
-
-    #print("Dialog geometry:", driverid.geometry())
-
-    #assert mock_dialog.isVisible()
-
-    #app.close()
-
-
-
-    #driverid.driverIdInput.setFocus()
-    #driverid.show()
-
-    #driver_id_input = driverid.findChild(QLineEdit, "driverInputId")
-
-    #assert driver_id_input is not None
-
-
+    assert accountdelete(username)
     
 
    
@@ -194,34 +169,7 @@ def test_correctcredentials_test(app,qtbot,driverid):
 
 
 
-    #qtbot.waitUntil(lambda: idtag.isVisible())
-
-    #print("After creating DriverIDDialog:", driverid.isVisible())
-
-    #print("Before setting text:", driverid.driverIdInput.isVisible(), driverid.driverIdInput.text())
     
-    #print("Is modal:", driverid.isModal())
-
-    # Now that the dialog is shown, you can interact with it
-    #dialog = qtbot.findObject(DriverIDDialog)
-    
-    # Set the driverId in the DriverIDDialog using setText
-    #idwindow.driverIdInput.setText(str(storedId))
-  
-    #QTimer.singleShot(500, idtag)
-    #QTest.keyClicks(driverid.driverIdInput, str(storedId))
-    #driver_id_input.setText(str(storedId))
-    #dialog.findChild(QLineEdit, "driverIdInput").setText(str(app.storedId))
-    #print("After setting text:", driverid.driverIdInput.isVisible(), driverid.driverIdInput.text())
-
-    # Accept the QDialog
-    #qtbot.mouseClick(driverid.verifyButton, QtCore.Qt.LeftButton)
-
-    #driver_id_from_dialog = idtag.getDriverId()
-    #assert app.error.text()== "Login Successful"
-    
-    #assert app.close()
-
 
 
 
@@ -283,17 +231,48 @@ def test_getuserid_test(app,driverid,qtbot):
 
 
 
-def test_updatepassword__(app,qtbot):
+def test_updatepassword__(app,qtbot,registeraccounts):
     username = "seb"
     password = "don1"
+    newpassword = "hello"
 
-    app.update_user_password(username,password)
+    def accountdelete(username):
+
+        query = 'DELETE FROM deliverydriver WHERE username=?'
+        app.cursor.execute(query,(username,))
+        app.conn.commit()
+        row = app.cursor.fetchone()
+
+        return row is None
+
+    def database(app):
+        app.conn = sqlite3.connect('deliveryusers.db')
+        app.cursor = app.conn.cursor()
+
+
+  
+
+
+    registeraccounts.registerDriver(username,password)
+
+    
+    
+    
+    app.update_driver_password(username,newpassword)
+
 
     query = 'SELECT password FROM deliverydriver WHERE username= ?'
     app.cursor.execute(query, (username,))
     user = app.cursor.fetchone()
 
-    assert user[0] == password
+    
+
+    assert user[0] == newpassword
+
+    assert accountdelete(username)
+
+
+
 
 
    
