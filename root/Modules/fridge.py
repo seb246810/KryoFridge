@@ -9,8 +9,9 @@ from HeadchefRegistration import *
 from PurchaseOrder import *
 import sqlite3
 
+
 class fridgeWindow(QMainWindow):
-    def __init__(self, role=None):
+    def __init__(self, role=None, colorblind_mode=False):
         super(fridgeWindow, self).__init__()
         uic.loadUi("../UI/fridge.ui", self)
 
@@ -27,23 +28,8 @@ class fridgeWindow(QMainWindow):
 
         # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
 
-        def ToggleColorblindMode(self, state):
-            if state == 2:
-                self.ApplyColorblindPalette()
-            else:
-                self.ApplyNormalPalette()
-
-        def ApplyColorblindPalette(self):
-            palette = QPalette()
-            palette.setColor(QPalette.Window, QColor("blue"))
-            palette.setColor(QPalette.WindowText, QColor("red"))
-            self.setPalette(palette)
-
-        def ApplyNormalPalette(self):
-            self.setPalette(self.style().standardPalette())# self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
-
-    def ToggleColorblindMode(self, state):
-        if state == 2:
+        self.colorblind_mode = colorblind_mode
+        if self.colorblind_mode:
             self.ApplyColorblindPalette()
         else:
             self.ApplyNormalPalette()
@@ -56,7 +42,6 @@ class fridgeWindow(QMainWindow):
 
     def ApplyNormalPalette(self):
         self.setPalette(self.style().standardPalette())
-
 
     def database(self):
         self.conn = sqlite3.connect('fridge.db')
@@ -74,18 +59,16 @@ class fridgeWindow(QMainWindow):
                 self.fridgeStorage.setItem(row_num, col_num, QTableWidgetItem(str(data)))
 
     def AddItemsToFridge(self):
-        dialog = AddItemsDialog()
+        dialog = AddItemsDialog(colorblind_mode=self.colorblind_mode)
         if dialog.exec_() == QDialog.Accepted:
             item_data = dialog.get_data()
             self.Db_Insertion(item_data)
             self.LoadFridgeContents()
 
-
-
     def deliveryDriveradd(self):
         if self.role == 'HeadChef':
             self.AddItemsToFridge()
-        
+
         elif self.role == 'DeliveryDriver':
             from driverAdd import driverAddWindow
             self.driverAdds = driverAddWindow()
@@ -94,10 +77,8 @@ class fridgeWindow(QMainWindow):
         else:
             QMessageBox.warning(self, "Access Denied", "You don't have permission to add items in the fridge.")
 
-
     def add_items(self):
         pass
-
 
     def Db_Insertion(self, item_data):
         try:
@@ -118,8 +99,8 @@ class fridgeWindow(QMainWindow):
         if self.role != 'HeadChef':
             QMessageBox.warning(self, "Access Denied", "Only the Head Chef can remove items.")
             return
-        else:   
-            dialog = RemoveItemDialog()
+        else:
+            dialog = RemoveItemDialog(colorblind_mode=self.colorblind_mode)
             if dialog.exec_() == QDialog.Accepted:
                 item_data = dialog.get_data()
                 self.Db_Deletion(item_data)
@@ -150,11 +131,8 @@ class fridgeWindow(QMainWindow):
             QMessageBox.warning(self, "Access Denied", "Only the Head Chef can make Purchase Orders!.")
             return
         else:
-             self.PurchaseOrder = PurchaseOrder()
-             self.PurchaseOrder.show()
-
-
-
+            self.PurchaseOrder = PurchaseOrder()
+            self.PurchaseOrder.show()
 
     def HealthReport(self):
         if self.role != 'HeadChef':
@@ -172,7 +150,24 @@ class fridgeWindow(QMainWindow):
             name, expiry_date = item
             health_status += f"Item: {name}, Expiry_Date: {expiry_date}\n"
 
-        QMessageBox.information(self, "Health Report", health_status)
+        self.showCustomMessageBox("Health Report", health_status, QMessageBox.Information)
+
+    def showCustomMessageBox(self, title, message, icon):
+        msgBox = QMessageBox(self)
+        msgBox.setWindowTitle(title)
+        msgBox.setText(message)
+        msgBox.setIcon(icon)
+
+        if self.colorblind_mode:
+            self.applyColorblindPaletteToMessageBox(msgBox)
+
+        msgBox.exec_()
+
+    def applyColorblindPaletteToMessageBox(self, msgBox):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        msgBox.setPalette(palette)
 
     def alert(self):
         if self.role != 'HeadChef':
@@ -185,11 +180,11 @@ class fridgeWindow(QMainWindow):
         self.cursor.execute("SELECT Name,Expiry_Date FROM Fridge")
         items = self.cursor.fetchall()
 
-        alert_triggered =False
-        for name,expiry_date in items:
+        alert_triggered = False
+        for name, expiry_date in items:
             expiry_qdate = QDate.fromString(expiry_date, "yyyy-MM-dd")
             if current_date.daysTo(expiry_qdate) <= threshold_days:
-                alert_triggered =True
+                alert_triggered = True
                 days_left = current_date.daysTo(expiry_qdate)
                 alert_status += f"{name} expires in {days_left} days\n"
 
@@ -198,15 +193,15 @@ class fridgeWindow(QMainWindow):
         else:
             QMessageBox.information(self, "Expiry Check", "No items are nearing expiry within the next 7 days.")
 
-
     def back(self):
         self.conn.close()
         self.close()
 
 
 class AddItemsDialog(QDialog):
-    def __init__(self):
+    def __init__(self, colorblind_mode=False):
         super().__init__()
+        self.colorblind_mode = colorblind_mode
         self.setWindowTitle("Add Item")
         layout = QVBoxLayout()
         form_layout = QFormLayout()
@@ -230,6 +225,15 @@ class AddItemsDialog(QDialog):
         layout.addWidget(buttons)
         self.setLayout(layout)
 
+        if self.colorblind_mode:
+            self.ApplyColorblindPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
     def get_data(self):
         return {
             "name": self.name_edit.text(),
@@ -239,9 +243,11 @@ class AddItemsDialog(QDialog):
             "ordered": int(self.ordered_checkbox.isChecked())
         }
 
+
 class RemoveItemDialog(QDialog):
-    def __init__(self):
+    def __init__(self, colorblind_mode=False):
         super().__init__()
+        self.colorblind_mode = colorblind_mode
         self.setWindowTitle("Remove Item")
 
         layout = QVBoxLayout()
@@ -261,9 +267,17 @@ class RemoveItemDialog(QDialog):
 
         self.setLayout(layout)
 
+        if self.colorblind_mode:
+            self.ApplyColorblindPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
     def get_data(self):
         return {
             "name": self.name_edit.text(),
             "quantity": int(self.quantity_edit.text())
         }
-

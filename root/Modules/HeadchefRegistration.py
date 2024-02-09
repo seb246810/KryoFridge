@@ -3,15 +3,16 @@ import sqlite3
 import hashlib
 import random
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QWidget
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QPalette
 from PyQt5 import uic, QtWidgets
 from fridge import *
 from Headcheflogin import *
 
+
 class Headchefregister(QMainWindow):
-    def __init__(self,parent = None):
-        super(Headchefregister,self).__init__()
-        uic.loadUi("../UI/HeadChefRegistration.ui",self)
+    def __init__(self, parent=None, colorblind_mode=False):
+        super(Headchefregister, self).__init__()
+        uic.loadUi("../UI/HeadChefRegistration.ui", self)
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)
         self.confirmfield.setEchoMode(QtWidgets.QLineEdit.Password)
         self.show()
@@ -21,8 +22,7 @@ class Headchefregister(QMainWindow):
 
         # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
 
-    def ToggleColorblindMode(self, state):
-        if state == 2:
+        if colorblind_mode:
             self.ApplyColorblindPalette()
         else:
             self.ApplyNormalPalette()
@@ -39,14 +39,14 @@ class Headchefregister(QMainWindow):
     def generate_unique_headchefID(self):
         conn = sqlite3.connect('headchefuser.db')
         cur = conn.cursor()
-        
+
         while True:
             headchefID = random.randint(1000, 9999)
-            
+
             # Check if the generated headchefID already exists in the database
             cur.execute('SELECT headchefID FROM user WHERE headchefID=?', (headchefID,))
             existing_id = cur.fetchone()
-            
+
             if not existing_id:
                 conn.close()
                 return headchefID

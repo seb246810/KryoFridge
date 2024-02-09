@@ -14,7 +14,7 @@ from fridge import *
 
 class driverLogin(QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, colorblind_mode=False, parent=None):
         super(driverLogin, self).__init__()
         uic.loadUi("../UI/driverLogin.ui", self)
         self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)  # hides user input password
@@ -30,13 +30,13 @@ class driverLogin(QWidget):
 
         self.fridge = None
 
-        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
-
-    def ToggleColorblindMode(self, state):
-        if state == 2:
+        self.colorblind_mode = colorblind_mode
+        if self.colorblind_mode:
             self.ApplyColorblindPalette()
         else:
             self.ApplyNormalPalette()
+
+        # self.checkBoxColorblindMode.stateChanged.connect(self.ToggleColorblindMode)
 
     def ApplyColorblindPalette(self):
         palette = QPalette()
@@ -50,7 +50,7 @@ class driverLogin(QWidget):
     def gotofridge(self):
         from fridge import fridgeWindow
         if not self.fridge:
-            self.fridge = fridgeWindow("DeliveryDriver")
+            self.fridge = fridgeWindow(role="DeliveryDriver", colorblind_mode=self.colorblind_mode)
             self.fridge.show()
             self.close()
 
@@ -74,7 +74,8 @@ class driverLogin(QWidget):
 
     def driverRegisterWindow(self):
         from driverRegistration import driverRegister
-        self.register = driverRegister()
+        self.register = driverRegister(colorblind_mode=self.colorblind_mode)
+        self.register.show()
 
     def driverLoginFunction(self):
         username = self.usernamefield.text()

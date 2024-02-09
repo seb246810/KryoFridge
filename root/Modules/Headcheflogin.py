@@ -2,7 +2,8 @@ import sys
 import hashlib
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QLineEdit, QDialog, QWidget
-from PyQt5 import uic,QtGui
+from PyQt5.QtGui import QPalette, QColor
+from PyQt5 import uic, QtGui
 import sqlite3
 import random
 from fridge import *
@@ -10,10 +11,10 @@ from fridge import *
 
 class Headcheflogin(QWidget):
 
-    def __init__(self, parent=None):
+    def __init__(self, colorblind_mode=False, parent=None):
         super(Headcheflogin, self).__init__()
-        uic.loadUi("../UI/ChefLogin.ui",self)
-        self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password) #hides user input password
+        uic.loadUi("../UI/ChefLogin.ui", self)
+        self.passwordfield.setEchoMode(QtWidgets.QLineEdit.Password)  # hides user input password
         self.show()
 
         self.LoginButton.clicked.connect(self.loginFunction)
@@ -26,12 +27,24 @@ class Headcheflogin(QWidget):
 
         self.fridge = None
 
+        self.colorblind_mode = colorblind_mode
+        if self.colorblind_mode:
+            self.ApplyColorblindPalette()
+        else:
+            self.ApplyNormalPalette()
+
+    def ApplyColorblindPalette(self):
+        palette = QPalette()
+        palette.setColor(QPalette.Window, QColor("blue"))
+        palette.setColor(QPalette.WindowText, QColor("red"))
+        self.setPalette(palette)
+
+    def ApplyNormalPalette(self):
+        self.setPalette(self.style().standardPalette())
+
     def gotofridge(self):
         from fridge import fridgeWindow
-        if not self.fridge:
-            self.fridge = fridgeWindow(role='HeadChef')
-
-            self.fridge = fridgeWindow('HeadChef')
+        self.fridge = fridgeWindow(role='HeadChef', colorblind_mode=self.colorblind_mode)
         self.hide()
         self.fridge.show()
 
@@ -50,7 +63,8 @@ class Headcheflogin(QWidget):
             QMessageBox.warning(self, "Access Denied",
                                 "Oops there can only be one head chef.", QMessageBox.Ok)
         else:
-            self.register = Headchefregister()
+            self.register = Headchefregister(colorblind_mode=self.colorblind_mode)
+            self.register.show()
 
     def hash_password(self, password):
         return hashlib.sha256(password.encode()).hexdigest()
@@ -59,7 +73,7 @@ class Headcheflogin(QWidget):
         username = self.usernamefield.text()
         password = self.passwordfield.text()
 
-        if len(username) == 0 or len(password) == 0: # error message if there's no input
+        if len(username) == 0 or len(password) == 0:  # error message if there's no input
             self.error.setText("Please input all fields.")
             return
 
@@ -85,14 +99,9 @@ class Headcheflogin(QWidget):
         update_query = 'UPDATE user SET role=? WHERE username=?'
         self.cursor.execute(update_query, ('HeadChef', username))
         self.conn.commit()
-        
+
     def back(self):
-        #import entry2
-        #self.window = entry2.entrypoint()
+        # import entry2
+        # self.window = entry2.entrypoint()
         self.close()
-        #self.window.show()
-    
-
-
-
-
+        # self.window.show()

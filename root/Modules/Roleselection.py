@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication,QMessageBox, QDialog
-from PyQt5 import uic,QtGui
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QLabel, QApplication, QMessageBox, QDialog
+from PyQt5 import uic, QtGui
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QSize
 from HeadchefRegistration import *
@@ -10,10 +10,10 @@ import sqlite3
 
 
 class entrypoint(QMainWindow):
-    
+
     def __init__(self):
-        super(entrypoint,self).__init__()
-        uic.loadUi("../UI/entrypoint.ui",self)
+        super(entrypoint, self).__init__()
+        uic.loadUi("../UI/entrypoint.ui", self)
         self.show()
 
         self.Headchef.clicked.connect(self.loginScreen)
@@ -38,36 +38,16 @@ class entrypoint(QMainWindow):
         self.setPalette(self.style().standardPalette())
 
     def loginScreen(self):
-        from Headcheflogin import Headcheflogin
-        self.login = Headcheflogin()
+        colorblind_mode = self.checkBoxColorblindMode.isChecked()
+        self.login = Headcheflogin(colorblind_mode=colorblind_mode)
+        self.login.show()
 
     def staffAccess(self):
-        from fridge import fridgeWindow
-        self.window = fridgeWindow(role=None)
-        
-        #self.close()
+        colorblind_mode = self.checkBoxColorblindMode.isChecked()
+        self.window = fridgeWindow(colorblind_mode=colorblind_mode)
         self.window.show()
 
     def driverLoginWindow(self):
-        self.login = driverLogin()
-
-
-
-
-
-
-
-
-       
-        
-
-
-
-    
-          
-            
-            
-        
- 
-
-    
+        colorblind_mode = self.checkBoxColorblindMode.isChecked()
+        self.login = driverLogin(colorblind_mode=colorblind_mode)
+        self.login.show()
